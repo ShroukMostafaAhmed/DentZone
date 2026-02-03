@@ -1,0 +1,46 @@
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
+
+export function getRoleFromToken(): string | null {
+    const token = Cookies.get("authToken");
+    if (!token) return null;
+
+    try {
+        const decoded = jwtDecode<{ role: string }>(token);
+        return decoded.role;
+    } catch (err) {
+        return null;
+    }
+}
+
+export const roleRoutes: Record<string, string[]> = {
+    Admin: ["*"],
+    Inventory: [
+        "/en/dashboard/product-list",
+        "/ar/dashboard/product-list",
+        "/en/dashboard/order-list",
+        "/ar/dashboard/order-list",
+        "/ar/dashboard/order-details",
+        "/en/dashboard/order-details",
+        "/ar/dashboard/return-list",
+        "/en/dashboard/return-list",
+        "/ar/dashboard/return-details",
+        "/en/dashboard/return-details",
+
+        // "/en/dashboard/sales",
+        // "/ar/dashboard/sales",
+        "/ar/dashboard/add-product-price",
+        "/en/dashboard/add-product-price",
+        "/en/dashboard/inventory-management",
+        "/ar/dashboard/inventory-management",
+        "/en/dashboard/edit-user/:id",
+        "/ar/dashboard/edit-user/:id",
+    ],
+    sales: ["/en/dashboard/sales", "/en/dashboard/register", "/ar/dashboard/sales", "/ar/dashboard/register"]
+};
+
+export const defaultRouteByRole: Record<string, string> = {
+    Admin: "/dashboard/analytics",
+    Inventory: "/dashboard/order-list",
+    sales: "/dashboard/sales",
+};
