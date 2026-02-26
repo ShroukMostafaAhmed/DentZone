@@ -36,7 +36,7 @@ const config: DocsThemeConfig = {
       return {
         light: 'Light',
         dark: 'Dark',
-        system: 'System', // Add this line
+        system: 'System', 
       };
     },
   },

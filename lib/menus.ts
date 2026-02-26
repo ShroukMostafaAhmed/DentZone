@@ -31,20 +31,18 @@ export type Group = {
   id: string;
 };
 
-// Helper function to handle locale in routes
 function getLocalizedRoute(route: string, locale: string): string {
-  // Skip locale handling for wildcard routes
   if (route === "*") return route;
 
-  // If route already has locale prefix, return as is
+
   if (route.startsWith(`/${locale}/`)) return route;
 
-  // If route has another locale prefix, replace it
+
   if (/^\/[a-z]{2}\//.test(route)) {
     return route.replace(/^\/[a-z]{2}\//, `/${locale}/`);
   }
 
-  // Add locale prefix to route
+
   return `/${locale}${route}`;
 }
 
@@ -60,16 +58,17 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
   const isAllowed = (href: string) => {
     if (allowedRoutes.has("*")) return true;
 
-    // Strip locale prefix for comparison
+
     const normalizedHref = href.replace(/^\/[a-z]{2}\//, '/');
 
     for (const route of Array.from(allowedRoutes)) {
       if (route === normalizedHref) return true;
 
-      // Dynamic route handling
+
       if (route.includes(":")) {
         const pattern = "^" + route
-            .replace(/:[^/]+/g, "[^/]+") // replace :id with regex
+            .replace(/:[^/]+/g, "[^/]+") 
+            
             .replace(/\//g, "\\/") + "$";
         if (new RegExp(pattern).test(normalizedHref)) {
           return true;
@@ -80,11 +79,11 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
     return false;
   };
 
-  // Function to localize href
+
   const localizeHref = (href: string): string => {
     if (!href.startsWith('/')) return href;
 
-    // Don't add locale prefix to paths that already have one
+
     if (/^\/[a-z]{2}\//.test(href)) return href;
 
     return `/${locale}${href}`;
@@ -111,7 +110,7 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
             },
             {
               href: "/dashboard/pharmacy-list",
-              label: t("pharmacyList"),
+              label: t("Doctor List"),
               active: pathname === "/dashboard/pharmacy-list",
               children: [],
               icon: "heroicons:users",
@@ -130,13 +129,13 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
               children: [],
               icon: "heroicons:document-text",
             },
-            {
-              href: "/dashboard/coupons",
-              label: t("coupons"),
-              active: pathname === "/dashboard/coupons",
-              children: [],
-              icon: "heroicons:document-text",
-            },
+            // {
+            //   href: "/dashboard/coupons",
+            //   label: t("coupons"),
+            //   active: pathname === "/dashboard/coupons",
+            //   children: [],
+            //   icon: "heroicons:document-text",
+            // },
             // {
             //   href: "/dashboard/ActiveIngredients",
             //   label: t("ActiveIngredients"),
@@ -144,13 +143,13 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
             //   children: [],
             //   icon: "heroicons:document-text",
             // },
-            {
-              href: "/dashboard/modules",
-              label: t("modules"),
-              active: pathname === "/dashboard/modules",
-              children: [],
-              icon: "heroicons:document-text",
-            },
+            // {
+            //   href: "/dashboard/modules",
+            //   label: t("modules"),
+            //   active: pathname === "/dashboard/modules",
+            //   children: [],
+            //   icon: "heroicons:document-text",
+            // },
             {
               href: "/dashboard/categories",
               label: t("categories"),
@@ -165,13 +164,13 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
               children: [],
               icon: "heroicons:document-text",
             },
-            {
-              href: "/dashboard/inventory-management",
-              label: t("Inventory Management"),
-              active: pathname === "/dashboard/inventory-management",
-              children: [],
-              icon: "heroicons:document-text",
-            },
+            // {
+            //   href: "/dashboard/inventory-management",
+            //   label: t("Inventory Management"),
+            //   active: pathname === "/dashboard/inventory-management",
+            //   children: [],
+            //   icon: "heroicons:document-text",
+            // },
             {
               href: `/dashboard/edit-user/${id}`,
               label: t("edit-user"),
@@ -181,18 +180,18 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
             },
             {
               href: "/dashboard/inventory-managers",
-              label: t("Inventory Managers"),
+              label: t("Providers"),
               active: pathname === "/dashboard/inventory-managers",
               children: [],
               icon: "heroicons:document-text",
             },
-            {
-              href: "/dashboard/area",
-              label: t("area"),
-              active: pathname === "/dashboard/area",
-              children: [],
-              icon: "heroicons:document-text",
-            },
+            // {
+            //   href: "/dashboard/area",
+            //   label: t("area"),
+            //   active: pathname === "/dashboard/area",
+            //   children: [],
+            //   icon: "heroicons:document-text",
+            // },
             {
               href: "/dashboard/register",
               label: t("register"),
@@ -464,7 +463,7 @@ export function getHorizontalMenuList(pathname: string, t: any, role: string, lo
     },
   ];
 
-  // remove empty menus
+
   return groups
       .map((group) => ({
         ...group,
@@ -473,7 +472,7 @@ export function getHorizontalMenuList(pathname: string, t: any, role: string, lo
       .filter((group) => group.menus.length > 0);
 }
 
-// Also update the default route to include locale
+
 export function getLocalizedDefaultRoute(role: string, locale: string = 'en'): string {
   const route = defaultRouteByRole[role] || "/dashboard/analytics";
   return `/${locale}${route}`;

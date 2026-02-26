@@ -54,19 +54,14 @@ import {Label} from "@/components/ui/label";
 
 export default function TransactionsTable() {
     const router = useRouter();
-    // using custom hook to fetch Invoice reports
     const {loading: loadingInvoiceReports, invoicesReports, fetchInvoiceReports} = useInvoiceReports();
 
-    // getting users by role id
     const {loading: loadingUsers, error: errorUsers, users, getUsersByRoleId} = useGetUsersByRoleId()
 
-    // getting regions
     const {loading: loadingMainAreas, error: errorMainAreas, mainAreas, getAllMainAreas} = useGettingAllMainAreas()
 
-    // getting all pharamacy users
     const {loading: loadingPharmacies, error: errorPharmacies, pharmacies, gettingAllPharmacies} = useGettingAllPharmacies()
 
-    // State for filter values
     const [dateRange, setDateRange] = useState<DateRange | undefined>({
         from: subDays(new Date(), 30),
         to: new Date(),

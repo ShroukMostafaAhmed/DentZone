@@ -79,7 +79,7 @@ const TransactionsTable = () => {
     onRowSelectionChange: setRowSelection,
     initialState: {
       pagination: {
-        pageSize: 50, // Set page size to 50
+        pageSize: 50, 
       },
     },
     state: {

@@ -23,28 +23,21 @@ import useGettingAllMainAreas from "@/services/area/gettingAllMainAreas";
 import gettingAllMainAreas from "@/services/area/gettingAllMainAreas";
 
 const InventoryPrices = () => {
-  // Params
   const params = useParams();
   const id = params?.id;
 
-  // getting product prices by inventory id
   const {gettingPricesByInventoryId, prices, loading: pricesLoading} = useGettingPricesByInventoryId()
 
-  // getting all regions
   const {loading: regionsLoading, error: regionsError, getAllMainAreas, mainAreas} = useGettingAllMainAreas()
 
-  // getting user Data by id
   const {error, loading, user, getUserById} = useGettingUserById()
 
-  // Deactivate user
   const { deactivateUser, loading: deactivateUserLoading, error: deactivateUserError } = useDeactivateUser()
 
   const {loading: updateUserLoading, updateUser} = useUpdateUser()
 
-  // Router navigator
   const router = useRouter();
 
-  // state for activation user
   const [activate, setActivate] = useState(false);
   const [userRole, setUserRole] = useState<UserRole | undefined>(undefined);
   const [userName, setUserName] = useState("");
@@ -54,7 +47,6 @@ const InventoryPrices = () => {
   const [minOrder, setMinOrder] = useState(0);
   const [region, setRegion] = useState("");
 
-  // Handle update (you'd normally call an update API here)
   const activateUserToggle = async () => {
 
     try {
@@ -74,7 +66,6 @@ const InventoryPrices = () => {
     }
   };
 
-  // Handle update (you'd normally call an update API here)
   const handleUpdate = async () => {
     const formData = new FormData();
     formData.append("UserName", userName);
@@ -273,7 +264,6 @@ const InventoryPrices = () => {
 
                 <CardContent className="space-y-4">
                   {prices.length > 0 ? (
-                       // need to create table of prices
                       <Table>
                         <TableHeader>
                           <TableRow>

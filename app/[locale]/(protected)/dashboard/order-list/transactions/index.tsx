@@ -41,20 +41,17 @@ import useVendorOrder from "@/services/Orders/vendor-order";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
-// @ts-ignore
 export default function TransactionsTable() {
   const userRole = Cookies.get("userRole");
   const isAdmin = userRole == "Admin";
   const userId = Cookies.get("userId");
 
-  // Hooks for different data sources
   const { loading: myOrdersLoading, orders: myOrders, gettingVendorOrders, error: myOrdersError } = useVendorOrder()
   const { gettingAllOrders, orders, loading, error } = useGettingAllOrders();
   const { loading: usersLoading, users: inventoryManagers, getUsersByRoleId } = useGetUsersByRoleId();
 
   const router = useRouter();
 
-  // Table state
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -62,10 +59,8 @@ export default function TransactionsTable() {
   const [filteredOrders, setFilteredOrders] = useState<Orders[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "all">("all");
 
-  // Create a unified data source - filter out orders with total amount = 0
   const allOrdersData = React.useMemo(() => {
     const rawData = isAdmin ? orders : myOrders;
-    // Filter out orders where totalAmount is 0 (returned orders)
     return rawData?.filter(order => order.totalAmount !== 0) || [];
   }, [isAdmin, orders, myOrders]);
 
@@ -103,7 +98,6 @@ export default function TransactionsTable() {
     },
   });
 
-  // Filter orders based on selected status
   const filterOrdersByStatus = (status: OrderStatus | "all") => {
     setSelectedStatus(status);
     if (!allOrdersData) return;
@@ -116,7 +110,6 @@ export default function TransactionsTable() {
     }
   };
 
-  // Load data based on user role
   useEffect(() => {
     if (isAdmin) {
       gettingAllOrders();
@@ -127,7 +120,6 @@ export default function TransactionsTable() {
     }
   }, [isAdmin, userId]);
 
-  // Update filtered orders when data changes
   useEffect(() => {
     if (allOrdersData) {
       filterOrdersByStatus(selectedStatus);
