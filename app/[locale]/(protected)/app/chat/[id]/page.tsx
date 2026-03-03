@@ -11,7 +11,6 @@ import {
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import Image from 'next/image';
 import { redirect } from '@/components/navigation';
-// import MessageFooter from './components/message-footer';
 import ChatHeader from './components/chat-header';
 import InfoWrapper from './components/info-wrapper';
 import { MoreHorizontal } from 'lucide-react';

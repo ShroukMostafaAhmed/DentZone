@@ -6,7 +6,6 @@ import MountedProvider from "@/providers/mounted.provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
-// language
 import { getLangDir } from "rtl-detect";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";

@@ -26,13 +26,13 @@ export const baseColumns = ({ refresh, t }: { refresh: () => void , t: (key: str
         header: t("pref"),
         cell: ({ row }) => <span>{row.getValue("pref")}</span>,
     },
-    {
-        accessorKey: "description",
-        header: t("description"),
-        cell: ({ row }) => {
-            return <span>{row.getValue("description")}</span>;
-        },
-    },
+    // {
+    //     accessorKey: "description",
+    //     header: t("description"),
+    //     cell: ({ row }) => {
+    //         return <span>{row.getValue("description")}</span>;
+    //     },
+    // },
     {
         id: "actions",
         accessorKey: "action",
@@ -40,7 +40,6 @@ export const baseColumns = ({ refresh, t }: { refresh: () => void , t: (key: str
         enableHiding: false,
         cell: ({ row }) => {
             const id: string | number | undefined = row.original.id;
-            // eslint-disable-next-line react-hooks/rules-of-hooks
             const pathname = usePathname();
             const { deleteCategoryById, loading } = useDeleteCategoryById();
 
@@ -57,41 +56,43 @@ export const baseColumns = ({ refresh, t }: { refresh: () => void , t: (key: str
                     description: t("delete_category_confirm"),
                     action: (
                         <div className="flex justify-end mx-auto items-center my-auto gap-2">
-                            <Button
-                                size="sm"
-                                onClick={() => toast.dismiss(toastId)}
-                                className="text-white px-3 py-1 rounded-md"
-                            >
-                                {t("cancel")}
-                            </Button>
-                            <Button
-                                size="sm"
-                                variant="shadow"
-                                disabled={loading}
-                                className="text-white px-3 py-1 rounded-md"
-                                onClick={async () => {
-                                    try {
-                                        const { success, error } = await deleteCategoryById(id as string);
-                                        toast.dismiss(toastId);
+                          <Button
+  size="sm"
+  variant="outline" 
+  onClick={() => toast.dismiss(toastId)}
+  className="px-3 py-1 rounded-md"
+>
+  {t("cancel")}
+</Button>
 
-                                        if (success) {
-                                            toast(t("category_deleted"), {
-                                                description: t("category_deleted_success"),
-                                            });
-                                            refresh()
-                                        } else {
-                                            throw new Error(error);
-                                        }
-                                    } catch (error) {
-                                        toast.dismiss(toastId);
-                                        toast(t("error"), {
-                                            description: (error as Error).message,
-                                        });
-                                    }
-                                }}
-                            >
-                                {t("confirm")}
-                            </Button>
+<Button
+  size="sm"
+  variant="outline" 
+  disabled={loading}
+  className="px-3 py-1 rounded-md text-white bg-red-600 border-red-600 hover:bg-red-700" 
+  onClick={async () => {
+    try {
+      const { success, error } = await deleteCategoryById(id as string);
+      toast.dismiss(toastId);
+
+      if (success) {
+        toast.success(t("category_deleted"), {
+          description: t("category_deleted_success"),
+        });
+        refresh();
+      } else {
+        throw new Error(error);
+      }
+    } catch (error) {
+      toast.dismiss(toastId);
+      toast.error(t("error"), {
+        description: (error as Error).message,
+      });
+    }
+  }}
+>
+  {t("confirm")}
+</Button>
                         </div>
                     ),
                 });

@@ -11,7 +11,7 @@ const DashCodeFooter = async () => {
         <FooterContent>
             <div className='flex justify-center text-default-600'>
                 <div className="text-center md:ltr:text-start md:rtl:text-right text-sm">
-                    COPYRIGHT &copy; 2025 <strong className="text-blue-500">StockTech</strong>, All rights Reserved
+                    COPYRIGHT &copy; 2026 <strong className="text-blue-500">StockTech</strong>, All rights Reserved
                 </div>
                 {/*<div className="md:ltr:text-right md:rtl:text-end text-center text-sm">*/}
                 {/*    Hand-crafted & Made by{" "}*/}

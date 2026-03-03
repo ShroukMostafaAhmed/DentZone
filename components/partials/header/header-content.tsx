@@ -6,16 +6,20 @@ import { cn } from "@/lib/utils";
 const HeaderContent = ({ children }: { children: React.ReactNode }) => {
   const [config] = useConfig();
 
+  const transitionClass = "transition-all duration-300 ease-in-out";
+
   if (config.sidebar === "two-column") {
     return (
       <header
-        className={cn("top-0 z-50", config.navbar, {
-          "has-sticky-header sticky top-6  px-6 ": config.navbar === "floating",
+        className={cn("top-0 z-50", config.navbar, transitionClass, {
+          "has-sticky-header sticky top-6 px-6": config.navbar === "floating",
         })}
       >
         <div
           className={cn(
-            "flex-none   bg-header backdrop-blur-lg md:px-6 px-[15px] py-3    xl:ms-[300px] flex items-center justify-between  relative",
+            "flex-none bg-header backdrop-blur-lg md:px-6 px-[15px] py-3 flex items-center justify-between relative",
+            transitionClass, 
+            "xl:ms-[300px]",
             {
               "xl:ms-[72px]": config.subMenu || !config.hasSubMenu,
               "border-b":
@@ -36,9 +40,9 @@ const HeaderContent = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <header
-      className={cn("top-0 z-50", config.navbar, {
+      className={cn("top-0 z-50", config.navbar, transitionClass, {
         [`dark theme-${config.headerColor}`]: config.headerColor !== "light",
-        "has-sticky-header sticky top-6  px-6 ": config.navbar === "floating",
+        "has-sticky-header sticky top-6 px-6": config.navbar === "floating",
         "top-10 has-sticky-header": config.layout === "compact",
         "has-sticky-header":
           config.layout === "semi-box" && config.navbar !== "floating",
@@ -48,7 +52,9 @@ const HeaderContent = ({ children }: { children: React.ReactNode }) => {
     >
       <div
         className={cn(
-          "flex-none    bg-header backdrop-blur-lg md:px-6 px-[15px] py-3    xl:ms-[248px]  flex items-center justify-between relative ",
+          "flex-none bg-header backdrop-blur-lg md:px-6 px-[15px] py-3 flex items-center justify-between relative",
+          transitionClass, 
+          "xl:ms-[248px]",
           {
             "xl:ms-[72px]": config.collapsed,
             "border-b":

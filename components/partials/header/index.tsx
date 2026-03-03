@@ -1,36 +1,40 @@
+"use client"; 
+
 import React from 'react'
 import HeaderContent from './header-content'
-import HeaderSearch from './header-search'
 import ProfileInfo from './profile-info'
-import Notifications from './notifications'
-import Messages from "./messages"
-import { Cart } from './cart'
 import ThemeSwitcher from './theme-switcher'
-import { SidebarToggle } from '@/components/partials/sidebar/sidebar-toggle'
 import { SheetMenu } from '@/components/partials/sidebar/menu/sheet-menu'
 import HorizontalMenu from "./horizontal-menu"
 import LocalSwitcher from './locale-switcher'
 import HeaderLogo from "./header-logo"
+import { useConfig } from "@/hooks/use-config";
+import { cn } from "@/lib/utils";
 
-const DashCodeHeader = async () => {
+const DashCodeHeader = () => {
+    const [config] = useConfig();
+    const { collapsed } = config;
+
     return (
         <>
             <HeaderContent>
-                <div className=' flex gap-3 items-center'>
-                    <HeaderLogo />
-                    {/* <SidebarToggle /> */}
-                    {/*<HeaderSearch />*/}
-                </div>
-                <div className="nav-tools flex items-center  md:gap-4 gap-3">
-                    <LocalSwitcher />
-                    <ThemeSwitcher />
-                    {/*<Messages />*/}
-                    {/*<Notifications />*/}
-                    <ProfileInfo />
-                    
+                <div className={cn(
+                    "flex w-full items-center justify-between transition-all duration-300",
                    
-                    <div className="lg:hidden">
-                         <SheetMenu />
+                    collapsed ? "ltr:ml-[72px] rtl:mr-[72px]" : "ltr:ml-[248px] rtl:mr-[248px]"
+                )}>
+                    <div className='flex gap-3 items-center'>
+                        <HeaderLogo />
+                    </div>
+                    
+                    <div className="nav-tools flex items-center md:gap-4 gap-3">
+                        <LocalSwitcher />
+                        <ThemeSwitcher />
+                        <ProfileInfo />
+                        
+                        <div className="lg:hidden">
+                             <SheetMenu />
+                        </div>
                     </div>
                 </div>
             </HeaderContent>
@@ -39,4 +43,4 @@ const DashCodeHeader = async () => {
     )
 }
 
-export default DashCodeHeader
+export default DashCodeHeader;

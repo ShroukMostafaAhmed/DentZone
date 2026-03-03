@@ -16,7 +16,6 @@ export const baseColumns = ({
 }): ColumnDef<ProductType>[] => {
   const userRole = Cookies.get("userRole");
 
-  // ===== الأعمدة الأساسية =====
   const columns: ColumnDef<ProductType>[] = [
     {
       accessorKey: "name",
@@ -53,7 +52,7 @@ export const baseColumns = ({
     },
     {
       accessorKey: "preef",
-      header: t("company"),
+      header: t("productPref"),
       cell: ({ row }) => (
         <div className="font-medium text-card-foreground/80">
           <span className="text-sm text-default-600">
@@ -67,16 +66,15 @@ export const baseColumns = ({
       header: t("category"),
       cell: ({ row }) => <span>{row.original.category.name}</span>,
     },
-    {
-      accessorKey: "activeIngredient",
-      header: t("activeIngredient"),
-      cell: ({ row }) => (
-        <span>{row.original.activeIngredient?.name ?? t("unknown")}</span>
-      ),
-    },
+    // {
+    //   accessorKey: "activeIngredient",
+    //   header: t("activeIngredient"),
+    //   cell: ({ row }) => (
+    //     <span>{row.original.activeIngredient?.name ?? t("unknown")}</span>
+    //   ),
+    // },
   ];
 
-  // ===== إضافة عمود Actions فقط للـ Admin =====
   if (userRole === "Admin") {
     columns.push({
       id: "actions",
@@ -92,35 +90,42 @@ export const baseColumns = ({
             action: (
               <div className="flex justify-end mx-auto items-center my-auto gap-2">
                 <Button
-                  size="sm"
-                  onClick={() => toast.dismiss(toastId)}
-                  className="text-white px-3 py-1 rounded-md"
-                >
-                  {t("cancel")}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="shadow"
-                  disabled={loading}
-                  className="text-white px-3 py-1 rounded-md"
-                  onClick={async () => {
-                    try {
-                      const { success, error } = await deleteProductById(id);
-                      toast.dismiss(toastId);
-                      if (success) {
-                        toast(t("successMessage"));
-                        refresh();
-                      } else {
-                        throw new Error(error);
-                      }
-                    } catch {
-                      toast.dismiss(toastId);
-                      toast(t("errorMessage"));
-                    }
-                  }}
-                >
-                  {t("remove")}
-                </Button>
+  size="sm"
+  variant="outline" 
+  onClick={() => toast.dismiss(toastId)}
+  className="px-3 py-1 rounded-md" 
+>
+  {t("cancel")}
+</Button>
+
+<Button
+  size="sm"
+  variant="outline" 
+  disabled={loading}
+  className="px-3 py-1 rounded-md text-white bg-red-600 border-red-600 hover:bg-red-700"
+  onClick={async () => {
+    try {
+      const { success, error } = await deleteProductById(id as string);
+      toast.dismiss(toastId);
+
+      if (success) {
+        toast.success(t("product_deleted"), {
+          description: t("product_deleted_success"),
+        });
+        refresh();
+      } else {
+        throw new Error(error);
+      }
+    } catch (error) {
+      toast.dismiss(toastId);
+      toast.error(t("error"), {
+        description: (error as Error).message,
+      });
+    }
+  }}
+>
+  {t("Confirm")}
+</Button>
               </div>
             ),
           });
@@ -128,7 +133,6 @@ export const baseColumns = ({
 
         return (
           <div className="flex items-center gap-1">
-            {/* زر Edit */}
             <Link
               href={`/dashboard/edit-product/${row.original.id}`}
               className="flex items-center p-2 border-b text-info hover:text-info-foreground bg-info/40 hover:bg-info duration-200 transition-all rounded-full"
@@ -136,7 +140,6 @@ export const baseColumns = ({
               <SquarePen className="w-4 h-4" />
             </Link>
 
-            {/* زر Delete */}
             <div
               onClick={() => handleDeleteProduct(row.original.id)}
               className="flex items-center p-2 text-destructive bg-destructive/40 duration-200 transition-all hover:bg-destructive/80 hover:text-destructive-foreground rounded-full"

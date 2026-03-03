@@ -2,7 +2,6 @@ import React from 'react';
 import AxiosInstance from "@/lib/AxiosInstance";
 
 function useDeleteProductById() {
-    // getting all products
 
     const [loading, setLoading] = React.useState(false);
 

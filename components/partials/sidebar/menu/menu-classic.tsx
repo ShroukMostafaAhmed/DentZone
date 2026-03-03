@@ -1,10 +1,10 @@
 "use client";
 
-import React, {useEffect, useRef, useState} from 'react'
-import {Ellipsis, Loader2} from "lucide-react";
+import React, { useEffect, useRef, useState } from 'react';
+import { Loader2 } from "lucide-react";
 import { usePathname } from "@/components/navigation";
 import { cn } from "@/lib/utils";
-import {getMenuList, Group} from "@/lib/menus";
+import { getMenuList, Group } from "@/lib/menus";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
     Tooltip,
@@ -17,7 +17,7 @@ import MenuLabel from "../common/menu-label";
 import MenuItem from "../common/menu-item";
 import { CollapseMenuButton } from "../common/collapse-menu-button";
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 import { getLangDir } from 'rtl-detect';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import Cookies from "js-cookie";
@@ -56,55 +56,65 @@ export function MenuClassic({ }) {
 
     return (
         <ScrollArea className="h-full [&>div>div[style]]:block!" dir={direction} ref={scrollableNodeRef}>
-          <nav className="mt-4 w-full">
-    <ul className={cn("flex flex-col gap-2 w-full transition-all duration-300", {
-        "px-4 items-start": !collapsed,
-        "px-0 items-center": collapsed 
-    })}>
-        {menuList?.map(({ groupLabel, menus }, index) => (
-            <li className="w-full flex flex-col items-center" key={index}>
-                {groupLabel && !collapsed && (
-                    <div className="w-full flex transition-all duration-200 justify-start mb-2">
-                        <MenuLabel label={groupLabel} />
-                    </div>
-                )}
-
-                <div className="flex flex-col gap-1 w-full items-center">
-                    {menus.map((item, menuIndex) => (
-                        <div key={menuIndex} className="w-full flex justify-center">
-                            {item.submenus.length === 0 ? (
-                                <TooltipProvider disableHoverableContent>
-                                    <Tooltip delayDuration={100}>
-                                        <TooltipTrigger asChild>
-                                            <div className="w-full flex justify-center">
-                                                <MenuItem 
-                                                    {...item}
-                                                    collapsed={collapsed} 
-                                                />
-                                            </div>
-                                        </TooltipTrigger>
-                                        {collapsed && (
-                                            <TooltipContent side="right">
-                                                {item.label}
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                </TooltipProvider>
-                            ) : (
-                                <div className="w-full flex justify-center">
-                                    <CollapseMenuButton
-                                        {...item}
-                                        collapsed={collapsed}
-                                    />
+            <nav className="mt-4 w-full">
+                <ul className={cn("flex flex-col gap-2 w-full transition-all duration-300", {
+                    "px-4": !collapsed,
+                    "px-0": collapsed 
+                })}>
+                    {menuList?.map(({ groupLabel, menus }, index) => (
+                        <li className="w-full flex flex-col items-center" key={index}>
+                            {groupLabel && !collapsed && (
+                                <div className="w-full transition-all duration-200 mb-2 px-2">
+                                    <MenuLabel label={groupLabel} />
                                 </div>
                             )}
-                        </div>
+
+                            <div className={cn("flex flex-col gap-1 w-full", {
+                                "items-center": collapsed,
+                                "items-stretch": !collapsed 
+                            })}>
+                                {menus.map((item, menuIndex) => (
+                                    <div key={menuIndex} className={cn("flex transition-all duration-300", {
+                                        "w-full": !collapsed,
+                                        "w-full flex justify-center": collapsed 
+                                    })}>
+                                        {item.submenus.length === 0 ? (
+                                            <TooltipProvider disableHoverableContent>
+                                                <Tooltip delayDuration={100}>
+                                                    <TooltipTrigger asChild>
+                                                        <div className={cn("w-full flex items-center", {
+                                                            "justify-center": collapsed
+                                                        })}>
+                                                            <MenuItem 
+                                                                {...item}
+                                                                collapsed={collapsed} 
+                                                            />
+                                                        </div>
+                                                    </TooltipTrigger>
+                                                    {collapsed && (
+                                                        <TooltipContent side="right">
+                                                            {item.label}
+                                                        </TooltipContent>
+                                                    )}
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                        ) : (
+                                            <div className={cn("w-full", {
+                                                "flex justify-center": collapsed
+                                            })}>
+                                                <CollapseMenuButton
+                                                    {...item}
+                                                    collapsed={collapsed}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </li>
                     ))}
-                </div>
-            </li>
-        ))}
-    </ul>
-</nav>
+                </ul>
+            </nav>
         </ScrollArea>
     );
 }

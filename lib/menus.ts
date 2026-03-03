@@ -7,6 +7,7 @@ export type SubChildren = {
   active: boolean;
   children?: SubChildren[];
 };
+
 export type Submenu = {
   href: string;
   label: string;
@@ -33,16 +34,10 @@ export type Group = {
 
 function getLocalizedRoute(route: string, locale: string): string {
   if (route === "*") return route;
-
-
   if (route.startsWith(`/${locale}/`)) return route;
-
-
   if (/^\/[a-z]{2}\//.test(route)) {
     return route.replace(/^\/[a-z]{2}\//, `/${locale}/`);
   }
-
-
   return `/${locale}${route}`;
 }
 
@@ -58,34 +53,26 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
   const isAllowed = (href: string) => {
     if (allowedRoutes.has("*")) return true;
 
-
     const normalizedHref = href.replace(/^\/[a-z]{2}\//, '/');
 
     for (const route of Array.from(allowedRoutes)) {
       if (route === normalizedHref) return true;
 
-
       if (route.includes(":")) {
         const pattern = "^" + route
             .replace(/:[^/]+/g, "[^/]+") 
-            
             .replace(/\//g, "\\/") + "$";
         if (new RegExp(pattern).test(normalizedHref)) {
           return true;
         }
       }
     }
-
     return false;
   };
 
-
   const localizeHref = (href: string): string => {
     if (!href.startsWith('/')) return href;
-
-
     if (/^\/[a-z]{2}\//.test(href)) return href;
-
     return `/${locale}${href}`;
   };
 
@@ -105,98 +92,63 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
               href: "/dashboard/analytics",
               label: t("analytics"),
               active: pathname === "/dashboard/analytics",
-              icon: "heroicons:arrow-trending-up",
+              icon: "",
               children: [],
             },
             {
               href: "/dashboard/pharmacy-list",
-              label: t("Doctor List"),
+              label: t("Doctors"),
               active: pathname === "/dashboard/pharmacy-list",
               children: [],
-              icon: "heroicons:users",
+              icon: "",
             },
             {
               href: "/dashboard/order-list",
               label: t("orderList"),
               active: pathname === "/dashboard/order-list",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
             {
               href: "/dashboard/return-list",
               label: t("returnList"),
               active: pathname === "/dashboard/return-list",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
-            // {
-            //   href: "/dashboard/coupons",
-            //   label: t("coupons"),
-            //   active: pathname === "/dashboard/coupons",
-            //   children: [],
-            //   icon: "heroicons:document-text",
-            // },
-            // {
-            //   href: "/dashboard/ActiveIngredients",
-            //   label: t("ActiveIngredients"),
-            //   active: pathname === "/dashboard/ActiveIngredients",
-            //   children: [],
-            //   icon: "heroicons:document-text",
-            // },
-            // {
-            //   href: "/dashboard/modules",
-            //   label: t("modules"),
-            //   active: pathname === "/dashboard/modules",
-            //   children: [],
-            //   icon: "heroicons:document-text",
-            // },
             {
               href: "/dashboard/categories",
               label: t("categories"),
               active: pathname === "/dashboard/categories",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
             {
               href: "/dashboard/product-list",
               label: t("productList"),
               active: pathname === "/dashboard/product-list",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
-            // {
-            //   href: "/dashboard/inventory-management",
-            //   label: t("Inventory Management"),
-            //   active: pathname === "/dashboard/inventory-management",
-            //   children: [],
-            //   icon: "heroicons:document-text",
-            // },
             {
               href: `/dashboard/edit-user/${id}`,
               label: t("edit-user"),
               active: pathname.startsWith(`/dashboard/edit-user/`),
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
             {
               href: "/dashboard/inventory-managers",
               label: t("Providers"),
               active: pathname === "/dashboard/inventory-managers",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
-            // {
-            //   href: "/dashboard/area",
-            //   label: t("area"),
-            //   active: pathname === "/dashboard/area",
-            //   children: [],
-            //   icon: "heroicons:document-text",
-            // },
             {
               href: "/dashboard/register",
               label: t("register"),
               active: pathname === "/dashboard/register",
-              icon: "heroicons:credit-card",
+              icon: "",
               children: [],
             },
             {
@@ -204,28 +156,28 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
               label: t("User Rules"),
               active: pathname === "/dashboard/user-rules",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
             {
               href: "/dashboard/reports",
               label: t("Reports"),
               active: pathname === "/dashboard/reports",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
             {
               href: "/dashboard/sales",
               label: t("sales"),
               active: pathname === "/dashboard/sales",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
             {
               href: "/dashboard/settings",
               label: t("settings"),
               active: pathname === "/dashboard/settings",
               children: [],
-              icon: "heroicons:document-text",
+              icon: "",
             },
           ],
         },
@@ -282,17 +234,11 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
   const filteredGroups: Group[] = [];
 
   for (const group of allMenus) {
-
     const filteredMenus: Menu[] = [];
 
     for (const menu of group.menus) {
-      if (role == "Admin" && menu.href == "/dashboard/inventory-management") {
-        continue;
-      }
       const filteredSubmenus: Submenu[] = menu.submenus?.filter((sub) => {
-        if (role === "Admin" && sub.href === "/dashboard/inventory-management") {
-          return false;
-        } if (role === "Inventory" && sub.href === "/dashboard/inventory-management") {
+        if (role === "Inventory" && sub.href === "/dashboard/inventory-management") {
           return true;
         }
         return isAllowed(sub.href);
@@ -333,15 +279,12 @@ export function getHorizontalMenuList(pathname: string, t: any, role: string, lo
 
   const localizeHref = (href: string): string => {
     if (!href.startsWith('/')) return href;
-
     if (/^\/[a-z]{2}\//.test(href)) return href;
-
     return `/${locale}${href}`;
   };
 
   const isAllowed = (href: string) => {
     if (normalizedRoutes.includes("*")) return true;
-
     const normalizedHref = href.replace(/^\/[a-z]{2}\//, '/');
     return normalizedRoutes.includes(normalizedHref);
   };
@@ -463,7 +406,6 @@ export function getHorizontalMenuList(pathname: string, t: any, role: string, lo
     },
   ];
 
-
   return groups
       .map((group) => ({
         ...group,
@@ -471,7 +413,6 @@ export function getHorizontalMenuList(pathname: string, t: any, role: string, lo
       }))
       .filter((group) => group.menus.length > 0);
 }
-
 
 export function getLocalizedDefaultRoute(role: string, locale: string = 'en'): string {
   const route = defaultRouteByRole[role] || "/dashboard/analytics";

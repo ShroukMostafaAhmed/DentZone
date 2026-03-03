@@ -19,7 +19,8 @@ type Inputs = {
     Email: string;
     Password: string;
     PhoneNumber: string;
-    RoleId: string; 
+    RoleId: string;
+    AddressLines: string;
     IsActive: boolean;
 };
 
@@ -49,6 +50,7 @@ const RegForm = () => {
             formData.append("Password", data.Password);
             formData.append("PhoneNumber", data.PhoneNumber);
             formData.append("RoleId", data.RoleId);
+             formData.append("AddressLines", data.AddressLines);
             formData.append("IsActive", String(data.IsActive)); 
 
             const result = await registerUser(formData);
@@ -89,6 +91,15 @@ const RegForm = () => {
                     id="email" 
                     type="email" 
                     {...register("Email", { required: "Email is required" })} 
+                />
+            </div>
+            
+              <div className="space-y-2">
+                <Label htmlFor="AddressLines">Address</Label>
+                <Input 
+                    id="AddressLines" 
+                    placeholder="Enter address lines" 
+                    {...register("AddressLines", { required: "Addressis required" })} 
                 />
             </div>
 
