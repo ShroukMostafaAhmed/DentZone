@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import {
-    Eye,
+    SquarePen,
     Trash2,
 } from "lucide-react";
 import {toast} from "sonner";
@@ -18,7 +18,7 @@ export type DataProps = {
   isPharmacy: boolean;
   regionName: string;
   action: React.ReactNode;
-  addresses: string;
+  addresses: { id: string; userId: string; addressLine: string } | { id: string; userId: string; addressLine: string }[];
   fullName: string;
 };
 export const baseColumns = ({ refresh }: { refresh: () => void }): ColumnDef<DataProps>[] => {
@@ -82,76 +82,78 @@ export const baseColumns = ({ refresh }: { refresh: () => void }): ColumnDef<Dat
     header: "Addresses",
     cell: ({ row }) => {
       const addresses = row.original.addresses;
-      return <div className="text-sm text-default-600">{addresses || "N/A"}</div>;
+      if (Array.isArray(addresses)) {
+        return <div className="text-sm text-default-600">{addresses.map((addr: any) => addr?.addressLine || "").join(", ") || "N/A"}</div>;
+      }
+      return <div className="text-sm text-default-600">{addresses?.addressLine || "N/A"}</div>;
     },
   },
-  {
-    id: "actions",
-    accessorKey: "action",
-    header: "Actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      // getting the selected user Id
-      const id: string | number = row.original.id;
-      const { deleteUser, loading, isDeleted, error } = useDeleteUser();
+  // {
+  //   id: "actions",
+  //   accessorKey: "action",
+  //   header: "Actions",
+  //   enableHiding: false,
+  //   cell: ({ row }) => {
+  //     const id: string | number = row.original.id;
+  //     const { deleteUser, loading } = useDeleteUser();
 
-      const handleDelete = () => {
-        const toastId = toast("Delete User", {
-          description: "Are you sure you want to delete this user?",
-          action: (
-              <div className="flex justify-end mx-auto items-center my-auto gap-2">
-                <Button
-                    size="sm"
-                    onClick={() => toast.dismiss(toastId)}
-                    className="text-white px-3 py-1 rounded-md"
-                >
-                  Cancel
-                </Button>
-                <Button
-                    size="sm"
-                    variant="shadow"
-                    disabled={loading}
-                    className="text-white px-3 py-1 rounded-md"
-                    onClick={async () => {
-                      const result = await deleteUser(id);
-                      toast.dismiss(toastId);
+  //     const handleDelete = () => {
+  //       const toastId = toast("Delete User", {
+  //         description: "Are you sure you want to delete this user?",
+  //         action: (
+  //             <div className="flex justify-end mx-auto items-center my-auto gap-2">
+  //               <Button
+  //                   size="sm"
+  //                   onClick={() => toast.dismiss(toastId)}
+  //                   className="text-white px-3 py-1 rounded-md"
+  //               >
+  //                 Cancel
+  //               </Button>
+  //               <Button
+  //                   size="sm"
+  //                   variant="shadow"
+  //                   disabled={loading}
+  //                   className="text-white px-3 py-1 rounded-md"
+  //                   onClick={async () => {
+  //                     const result = await deleteUser(id);
+  //                     toast.dismiss(toastId);
 
-                      if (result.success) {
-                        toast("User deleted", {
-                          description: "The user was deleted successfully.",
-                        });
-                        refresh();
-                      } else {
-                        toast("Error", {
-                          description: result.error ?? "There was an error deleting the user.",
-                        });
-                      }
-                    }}
-                >
-                  Confirm
-                </Button>
-              </div>
-          ),
-        });
-      };
+  //                     if (result.success) {
+  //                       toast("User deleted", {
+  //                         description: "The user was deleted successfully.",
+  //                       });
+  //                       refresh();
+  //                     } else {
+  //                       toast("Error", {
+  //                         description: result.error ?? "There was an error deleting the user.",
+  //                       });
+  //                     }
+  //                   }}
+  //               >
+  //                 Confirm
+  //               </Button>
+  //             </div>
+  //         ),
+  //       });
+  //     };
 
-      return (
-          <div className="flex items-center gap-1">
-            <Link
-                href={`/dashboard/inventory-managers/details/${id}`}
-                className="flex items-center p-2 text-blue-100 bg-blue-300 duration-200 transition-all hover:bg-blue-100 hover:text-blue-300 rounded-full cursor-pointer"
-            >
-              <Eye className="w-4 h-4" />
-            </Link>
-            <div
-                onClick={handleDelete}
-                className="flex items-center p-2 text-destructive bg-destructive/40 duration-200 transition-all hover:bg-destructive/80 hover:text-destructive-foreground rounded-full cursor-pointer"
-            >
-              <Trash2 className="w-4 h-4" />
-            </div>
-          </div>
-      );
-    },
-  },
+  //     return (
+  //         <div className="flex items-center gap-1">
+  //           <Link
+  //               href={`/dashboard/inventory-managers/details/${id}`}
+  //           className="flex items-center p-2 border-b text-info hover:text-info-foreground bg-info/20 hover:bg-info duration-200 transition-all rounded-full"
+  //           >
+  //           <SquarePen className="w-4 h-4" />
+  //           </Link>
+  //           <div
+  //               onClick={handleDelete}
+  //               className="flex items-center p-2 text-destructive bg-destructive/40 duration-200 transition-all hover:bg-destructive/80 hover:text-destructive-foreground rounded-full cursor-pointer"
+  //           >
+  //             <Trash2 className="w-4 h-4" />
+  //           </div>
+  //         </div>
+  //     );
+  //   },
+  // },
 ];
 };

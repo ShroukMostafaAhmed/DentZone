@@ -2,25 +2,12 @@
 import React from 'react'
 import { Link } from '@/components/navigation'
 import DashCodeLogo from "@/components/dascode-logo"
-import { useConfig } from '@/hooks/use-config'
-import { useMediaQuery } from '@/hooks/use-media-query'
 
 const HeaderLogo = () => {
-    const [config] = useConfig();
-
-    const isDesktop = useMediaQuery('(min-width: 1280px)');
-
     return (
-        config.layout === 'horizontal' ? (
-            <Link href="/dashboard/analytics" className="flex gap-2 items-center    ">
-                <DashCodeLogo className="  text-default-900 h-8 w-8 [&>path:nth-child(3)]:text-background [&>path:nth-child(2)]:text-background" />
-            </Link>
-        ) :
-            !isDesktop && (
-                <Link href="/dashboard/analytics" className="flex gap-2 items-center    ">
-                    <DashCodeLogo />
-                </Link>
-            )
+        <Link href="/dashboard/analytics" className="flex items-center overflow-visible select-none relative z-[70]">
+            <DashCodeLogo className="max-w-[160px] min-w-[120px]" />
+        </Link>
     )
 }
 

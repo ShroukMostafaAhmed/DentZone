@@ -8,32 +8,22 @@ import { SheetMenu } from '@/components/partials/sidebar/menu/sheet-menu'
 import HorizontalMenu from "./horizontal-menu"
 import LocalSwitcher from './locale-switcher'
 import HeaderLogo from "./header-logo"
-import { useConfig } from "@/hooks/use-config";
-import { cn } from "@/lib/utils";
 
 const DashCodeHeader = () => {
-    const [config] = useConfig();
-    const { collapsed } = config;
-
     return (
         <>
             <HeaderContent>
-                <div className={cn(
-                    "flex w-full items-center justify-between transition-all duration-300",
-                   
-                    collapsed ? "ltr:ml-[72px] rtl:mr-[72px]" : "ltr:ml-[248px] rtl:mr-[248px]"
-                )}>
-                    <div className='flex gap-3 items-center'>
+                <div className="flex w-full items-center justify-between h-full overflow-visible">
+                    <div className="flex-none flex items-center justify-start overflow-visible">
                         <HeaderLogo />
                     </div>
-                    
-                    <div className="nav-tools flex items-center md:gap-4 gap-3">
+
+                    <div className="nav-tools flex items-center md:gap-4 gap-3 flex-none overflow-visible">
                         <LocalSwitcher />
                         <ThemeSwitcher />
                         <ProfileInfo />
-                        
                         <div className="lg:hidden">
-                             <SheetMenu />
+                            <SheetMenu />
                         </div>
                     </div>
                 </div>
