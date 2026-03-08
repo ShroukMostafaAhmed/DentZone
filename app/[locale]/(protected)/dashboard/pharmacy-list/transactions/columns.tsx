@@ -1,11 +1,58 @@
+import React, { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { SquarePen, Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from '@/i18n/routing';
 import { Badge } from "@/components/ui/badge";
-import {toast} from "sonner";
-import {Button} from "@/components/ui/button";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import useDeleteUser from "@/services/users/DeleteUser";
+
+// --- مكون عرض العناوين الذكي (يدعم الاتجاهين عربي/إنجليزي) ---
+const AddressCell = ({ addresses, t }: { addresses: any; t: any }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const addressList = Array.isArray(addresses) 
+    ? addresses.map((addr: any) => addr?.addressLine).filter(Boolean)
+    : addresses?.addressLine ? [addresses.addressLine] : [];
+
+  if (addressList.length === 0 || addressList[0] === "N/A") {
+    return <span className="text-default-400 text-sm">N/A</span>;
+  }
+
+  const hasMultiple = addressList.length > 1;
+  const visibleAddresses = isExpanded ? addressList : [addressList[0]];
+
+  return (
+    <div className="flex flex-col py-1 min-w-[250px] max-w-[400px] gap-1">
+      {visibleAddresses.map((addr, index) => (
+        <div 
+          key={index} 
+          // dir="auto" تجعل المتصفح يحدد الاتجاه بناءً على أول حرف في النص
+          dir="auto"
+          className="text-[13px] text-default-600 leading-relaxed border-b border-dashed border-default-200 last:border-0 pb-1.5 mb-0.5 last:mb-0 last:pb-0 text-start"
+        >
+          {addr}
+        </div>
+      ))}
+      
+      {hasMultiple && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsExpanded(!isExpanded);
+          }}
+          className="text-[11px] font-bold text-blue-500 hover:text-blue-700 w-fit mt-1 underline-offset-4 hover:underline transition-all text-start"
+        >
+          {isExpanded 
+            ? (t("showLess") || "Show Less") 
+            : `+ ${addressList.length - 1} ${t("moreAddresses") || "More Addresses"}`}
+        </button>
+      )}
+    </div>
+  );
+};
 
 export type DataProps = {
   [x: string]: any;
@@ -19,6 +66,7 @@ export type DataProps = {
   action: React.ReactNode;
   isPharmacy: boolean;
   regionName: string;
+  addresses: any;
   pharmacyDetails: {
     arabicName: string;
     englishName: string;
@@ -26,10 +74,11 @@ export type DataProps = {
     fullName: string;
   }
 };
-export const baseColumn = ({t, refresh} : {
+
+export const baseColumn = ({ t, refresh }: {
   t: (key: string) => string;
   refresh?: () => void;
-}) : ColumnDef<DataProps>[] => [
+}): ColumnDef<DataProps>[] => [
   {
     accessorKey: "fullName",
     header: t("fullName"),
@@ -46,112 +95,23 @@ export const baseColumn = ({t, refresh} : {
       );
     },
   },
-  // {
-  //   accessorKey: "phone",
-  //   header: "Phone",
-  //   cell: ({ row }) => <span>{row.getValue("phone")}</span>,
-  // },
   {
     accessorKey: "email",
     header: t("email"),
-    cell: ({ row }) => <span>{row.getValue("email")}</span>,
+    cell: ({ row }) => <span className="text-sm">{row.getValue("email")}</span>,
   },
-  // {
-  //   accessorKey: "pharmacyDetails",
-  //   header: t("arabicName"),
-  //   cell: ({ row }) => {
-  //     return <span> {row.original?.pharmacyDetails?.arabicName || "N/A"}</span>;
-  //   },
-  // },
-  // {
-  //   accessorKey: "pharmacyDetails",
-  //   header: t("englishName"),
-  //   cell: ({ row }) => {
-  //     return <span> {row.original?.pharmacyDetails?.englishName || "N/A"}</span>;
-  //   },
-  // },
   {
     accessorKey: "phoneNumber",
     header: t("phoneNumber"),
     cell: ({ row }) => {
-      return <span> {row.original.phoneNumber || "N/A"}</span>;
+      return <span className="text-sm text-default-600"> {row.original.phoneNumber || "N/A"}</span>;
     },
   },
   {
     accessorKey: "addresses",
     header: t("addresses"),
     cell: ({ row }) => {
-      const addresses = row.original.addresses;
-      if (Array.isArray(addresses)) {
-        return <span>{addresses.map((addr: any) => addr?.addressLine || "").join(", ") || "N/A"}</span>;
-      }
-      return <span>{addresses?.addressLine || "N/A"}</span>;
+      return <AddressCell addresses={row.original.addresses} t={t} />;
     },
   },
-  // {
-  //   id: "actions",
-  //   accessorKey: "action",
-  //   header: t("actions"),
-  //   enableHiding: false,
-  //   cell: ({ row }) => {
-  //     const { deleteUser, loading } = useDeleteUser();
-
-  //     const handleDelete = () => {
-  //       const toastId = toast("Delete User", {
-  //         description: "Are you sure you want to delete this user?",
-  //         action: (
-  //             <div className="flex justify-end mx-auto items-center my-auto gap-2">
-  //               <Button
-  //                   size="sm"
-  //                   onClick={() => toast.dismiss(toastId)}
-  //                   className="text-white px-3 py-1 rounded-md"
-  //               >
-  //                 Cancel
-  //               </Button>
-  //               <Button
-  //                   size="sm"
-  //                   variant="shadow"
-  //                   disabled={loading}
-  //                   className="text-white px-3 py-1 rounded-md"
-  //                   onClick={async () => {
-  //                     const result = await deleteUser(row.original.id);
-  //                     toast.dismiss(toastId);
-
-  //                     if (result.success) {
-  //                       toast("User deleted", {
-  //                         description: "The user was deleted successfully.",
-  //                       });
-  //                       refresh?.();
-  //                     } else {
-  //                       toast("Error", {
-  //                         description: result.error ?? "There was an error deleting the user.",
-  //                       });
-  //                     }
-  //                   }}
-  //               >
-  //                 Confirm
-  //               </Button>
-  //             </div>
-  //         ),
-  //       });
-  //     };
-
-  //     return (
-  //       <div className="flex items-center gap-1">
-  //         <Link
-  //           href={`/dashboard/edit-user/${row.original.id}`}
-  //           className="flex items-center p-2 border-b text-info hover:text-info-foreground bg-info/20 hover:bg-info duration-200 transition-all rounded-full"
-  //         >
-  //           <SquarePen className="w-4 h-4" />
-  //         </Link>
-  //         <div
-  //             onClick={handleDelete}
-  //             className="flex items-center p-2 text-destructive bg-destructive/40 duration-200 transition-all hover:bg-destructive/80 hover:text-destructive-foreground rounded-full cursor-pointer"
-  //         >
-  //           <Trash2 className="w-4 h-4" />
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // },
 ];

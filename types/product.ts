@@ -3,8 +3,10 @@ import { CategoryType } from "@/types/category";
 import { ActiveIngredient } from "@/types/activeIngredient";
 
 export type ProductType = {
-    productCode: string;
     id?: string,
+     productCode: string;
+    productName: string;
+     productArabicName?: string;
     name: string,
     arabicName?: string,
     preef: string,

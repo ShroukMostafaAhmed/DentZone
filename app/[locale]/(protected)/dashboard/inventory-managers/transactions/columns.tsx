@@ -1,13 +1,58 @@
+import React, { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-    SquarePen,
-    Trash2,
-} from "lucide-react";
-import {toast} from "sonner";
-import {Button} from "@/components/ui/button";
+import { SquarePen, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import useDeleteUser from "@/services/users/DeleteUser";
-import {Link} from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+
+// --- مكون عرض العناوين الذكي (يدعم الاتجاهين) ---
+const AddressCell = ({ addresses, t }: { addresses: any; t: any }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const addressList = Array.isArray(addresses) 
+    ? addresses.map((addr: any) => addr?.addressLine).filter(Boolean)
+    : addresses?.addressLine ? [addresses.addressLine] : [];
+
+  if (addressList.length === 0 || addressList[0] === "N/A") {
+    return <span className="text-default-400 text-sm">N/A</span>;
+  }
+
+  const hasMultiple = addressList.length > 1;
+  const visibleAddresses = isExpanded ? addressList : [addressList[0]];
+
+  return (
+    <div className="flex flex-col py-1 min-w-[250px] max-w-[400px] gap-1">
+      {visibleAddresses.map((addr, index) => (
+        <div 
+          key={index} 
+          // dir="auto" هي اللي بتخلي العربي يمين والإنجليزي شمال تلقائياً
+          dir="auto"
+          className="text-[13px] text-default-600 leading-relaxed border-b border-dashed border-default-200 last:border-0 pb-1.5 mb-1 last:mb-0 last:pb-0 font-sans tracking-wide text-start"
+        >
+          {addr}
+        </div>
+      ))}
+      
+      {hasMultiple && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsExpanded(!isExpanded);
+          }}
+          // استخدام text-start بيضمن إن الزرار يظهر في بداية السطر حسب اتجاه اللغة
+          className="text-[11px] font-bold text-blue-500 hover:text-blue-700 w-fit mt-1 underline-offset-4 hover:underline transition-all text-start"
+        >
+          {isExpanded 
+            ? (t("showLess") || "Show Less") 
+            : `+ ${addressList.length - 1} ${t("moreAddresses") || "More Addresses"}`}
+        </button>
+      )}
+    </div>
+  );
+};
 
 export type DataProps = {
   id: string | number;
@@ -21,139 +66,40 @@ export type DataProps = {
   addresses: { id: string; userId: string; addressLine: string } | { id: string; userId: string; addressLine: string }[];
   fullName: string;
 };
+
 export const baseColumns = ({ refresh }: { refresh: () => void }): ColumnDef<DataProps>[] => {
   const t = useTranslations();
+  
   return [
-  {
-    accessorKey: "fullName",
-    header: "Full Name",
-    cell: ({ row }) => {
-      const user = row.original.fullName;
-      return (
-          <div className="text-sm text-default-600">{user}</div>
-      );
+    {
+      accessorKey: "fullName",
+      header: "Full Name",
+      cell: ({ row }) => {
+        const user = row.original.fullName;
+        return <div className="text-sm text-default-600">{user}</div>;
+      },
     },
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-    cell: ({ row }) => {
-      const email = row.original.email;
-      return (
-          <div className="text-sm text-default-600">{email}</div>
-      );
+    {
+      accessorKey: "email",
+      header: "Email",
+      cell: ({ row }) => {
+        const email = row.original.email;
+        return <div className="text-sm text-default-600">{email}</div>;
+      },
     },
-  },
-  // {
-  //   accessorKey: "businessName",
-  //   header: "Business Name",
-  //   cell: ({ row }) => {
-  //     const businessName = row.original.businessName;
-  //     return (
-  //         <div className="text-sm text-default-600">{businessName}</div>
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: "phoneNumber",
-  //   header: "Phone Number",
-  //   cell: ({ row }) => {
-  //     const phone = row.original.phoneNumber;
-  //     return <div className="text-sm text-default-600">{phone}</div>;
-  //   },
-  // },
-  // {
-  //   accessorKey: "isPharmacy",
-  //   header: "Is Pharmacy?",
-  //   cell: ({ row }) => {
-  //     const isPharmacy = row.original.isPharmacy;
-  //     return <div className="text-sm text-default-600">{isPharmacy === true ? "Yes" : "No"}</div>;
-  //   },
-  // },
-  {
-    accessorKey: "phoneNumber",
-    header: t("phoneNumber"),
-    cell: ({ row }) => {
-      return <span> {row.original.phoneNumber || "N/A"}</span>;
+    {
+      accessorKey: "phoneNumber",
+      header: t("phoneNumber"),
+      cell: ({ row }) => {
+        return <span className="text-sm text-default-600">{row.original.phoneNumber || "N/A"}</span>;
+      },
     },
-  },
-  {
-    accessorKey: "addresses",
-    header: "Addresses",
-    cell: ({ row }) => {
-      const addresses = row.original.addresses;
-      if (Array.isArray(addresses)) {
-        return <div className="text-sm text-default-600">{addresses.map((addr: any) => addr?.addressLine || "").join(", ") || "N/A"}</div>;
-      }
-      return <div className="text-sm text-default-600">{addresses?.addressLine || "N/A"}</div>;
+    {
+      accessorKey: "addresses",
+      header: "Addresses",
+      cell: ({ row }) => {
+        return <AddressCell addresses={row.original.addresses} t={t} />;
+      },
     },
-  },
-  // {
-  //   id: "actions",
-  //   accessorKey: "action",
-  //   header: "Actions",
-  //   enableHiding: false,
-  //   cell: ({ row }) => {
-  //     const id: string | number = row.original.id;
-  //     const { deleteUser, loading } = useDeleteUser();
-
-  //     const handleDelete = () => {
-  //       const toastId = toast("Delete User", {
-  //         description: "Are you sure you want to delete this user?",
-  //         action: (
-  //             <div className="flex justify-end mx-auto items-center my-auto gap-2">
-  //               <Button
-  //                   size="sm"
-  //                   onClick={() => toast.dismiss(toastId)}
-  //                   className="text-white px-3 py-1 rounded-md"
-  //               >
-  //                 Cancel
-  //               </Button>
-  //               <Button
-  //                   size="sm"
-  //                   variant="shadow"
-  //                   disabled={loading}
-  //                   className="text-white px-3 py-1 rounded-md"
-  //                   onClick={async () => {
-  //                     const result = await deleteUser(id);
-  //                     toast.dismiss(toastId);
-
-  //                     if (result.success) {
-  //                       toast("User deleted", {
-  //                         description: "The user was deleted successfully.",
-  //                       });
-  //                       refresh();
-  //                     } else {
-  //                       toast("Error", {
-  //                         description: result.error ?? "There was an error deleting the user.",
-  //                       });
-  //                     }
-  //                   }}
-  //               >
-  //                 Confirm
-  //               </Button>
-  //             </div>
-  //         ),
-  //       });
-  //     };
-
-  //     return (
-  //         <div className="flex items-center gap-1">
-  //           <Link
-  //               href={`/dashboard/inventory-managers/details/${id}`}
-  //           className="flex items-center p-2 border-b text-info hover:text-info-foreground bg-info/20 hover:bg-info duration-200 transition-all rounded-full"
-  //           >
-  //           <SquarePen className="w-4 h-4" />
-  //           </Link>
-  //           <div
-  //               onClick={handleDelete}
-  //               className="flex items-center p-2 text-destructive bg-destructive/40 duration-200 transition-all hover:bg-destructive/80 hover:text-destructive-foreground rounded-full cursor-pointer"
-  //           >
-  //             <Trash2 className="w-4 h-4" />
-  //           </div>
-  //         </div>
-  //     );
-  //   },
-  // },
-];
+  ];
 };
