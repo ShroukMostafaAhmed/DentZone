@@ -99,7 +99,6 @@ export default function TransactionsTable() {
         },
     });
 
-    // Fetch dropdown data on mount
     useEffect(() => {
         const fetchDataInitail = async () => {
             try {
@@ -115,7 +114,6 @@ export default function TransactionsTable() {
         gettingAllPharmacies()
     }, []);
 
-    // Fetch data when page number or page size changes
     useEffect(() => {
         fetchData();
     }, [pageNumber, pageSize]);
@@ -123,7 +121,6 @@ export default function TransactionsTable() {
     const fetchData = () => {
         const params = new URLSearchParams();
 
-        // Add filters only if they have values
         if (dateRange?.from) {
             params.set('StartDate', dateRange.from.toISOString());
         }
@@ -146,17 +143,15 @@ export default function TransactionsTable() {
             params.set('PaymentMethod', paymentMethod);
         }
 
-        // Always add pagination params
         params.set('PageNumber', pageNumber.toString());
         params.set('PageSize', pageSize.toString());
         console.log(params.toString())
 
-        // Call the API with the constructed query string
         fetchInvoiceReports(params.toString());
     };
 
     const handleApplyFilters = () => {
-        setPageNumber(1); // Reset to first page when filters change
+        setPageNumber(1); 
         fetchData();
     };
 
@@ -193,7 +188,6 @@ export default function TransactionsTable() {
             <div className="px-5 py-4 flex flex-col gap-4">
                 <Label className="text-lg font-semibold">Filters</Label>
                 <hr className="border-default-200" />
-                {/* Date Range Picker */}
                 <div className="flex items-center justify-center gap-2 ">
                     <Label >Date Range</Label>
                     <Popover>
@@ -234,7 +228,6 @@ export default function TransactionsTable() {
                     </Popover>
                 </div>
 
-                {/* Pharmacy User Select */}
                 <div className="flex items-center gap-2">
                     <Label htmlFor="pharmacyUserId">Pharmacy User</Label>
                     <Select
@@ -257,7 +250,6 @@ export default function TransactionsTable() {
                     </Select>
                 </div>
 
-                {/* Inventory User Select */}
                 <div className="flex items-center gap-2">
                     <Label htmlFor="inventoryUserId">Inventory User</Label>
                     <Select
@@ -280,7 +272,6 @@ export default function TransactionsTable() {
                     </Select>
                 </div>
 
-                {/* Region Select */}
                 <div className="flex items-center gap-2">
                     <Label htmlFor="regionId">Region</Label>
                     <Select
@@ -302,7 +293,6 @@ export default function TransactionsTable() {
                     </Select>
                 </div>
 
-                {/* Status Filter */}
                 <div className="flex items-center gap-2">
                     <Label htmlFor="status">Status</Label>
                     <Select
@@ -333,7 +323,7 @@ export default function TransactionsTable() {
                     </Select>
                 </div>
 
-                {/* Payment Method Filter */}
+               
                 <div className="flex items-center gap-2">
                     <Label htmlFor="paymentMethod">Payment Method</Label>
                     <Select
@@ -431,7 +421,6 @@ export default function TransactionsTable() {
                 </CardContent>
             )}
 
-            {/* Custom pagination that works with the API */}
             {invoicesReports && (
                 <div className="flex flex-col sm:flex-row items-center justify-between p-4 gap-4">
                     <div className="flex items-center gap-2">
@@ -442,7 +431,7 @@ export default function TransactionsTable() {
                             value={pageSize.toString()}
                             onValueChange={(value) => {
                                 setPageSize(Number(value));
-                                setPageNumber(1); // Reset to first page when page size changes
+                                setPageNumber(1); 
                             }}
                         >
                             <SelectTrigger className="h-8 w-[70px]">

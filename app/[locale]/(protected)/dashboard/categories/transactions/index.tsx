@@ -44,7 +44,6 @@ const TransactionsTable = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  // getting all Categories as mounted
   const {data, loading, gettingAllCategories} = getCategories()
 
   const t = useTranslations("categories");
@@ -73,12 +72,10 @@ const TransactionsTable = () => {
   });
 
 
-  // mounted data
   useEffect(() => {
     gettingAllCategories()
   }, []);
 
-  // filtering data
     useEffect(() => {
         if (data) {
         setFilteredCategories(data);

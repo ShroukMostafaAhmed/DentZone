@@ -57,21 +57,18 @@ const TransactionsTable = () => {
 
   const { loading: uploadLoading, error: uploadError, uploadCSV } = useUploadCsv();
 
-  // Non-admin prices
   const {
     loading: managerLoading,
     prices: managerPrices,
     gettingPricesForInventoryManager,
   } = useGettingPricesForInventoryManager();
 
-  // Admin user prices
   const {
     loading: inventoryIdLoading,
     prices: adminPrices,
     gettingPricesByInventoryId,
   } = useGettingPricesByInventoryId();
 
-  // Users for Admin select
   const {
     loading: usersLoading,
     users,
@@ -85,7 +82,6 @@ const TransactionsTable = () => {
 
   const isAdmin = userRole === "Admin";
 
-  // Table Data: Admin → based on selected user, Others → default manager data
   const tableData = isAdmin ? adminPrices : managerPrices;
   const isLoading = isAdmin ? inventoryIdLoading : managerLoading;
 

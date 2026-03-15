@@ -63,8 +63,8 @@ export const baseColumns = ({
         const { loading, deleteProductById } = useDeleteProductById();
 
         const handleDelete = (id: string) => {
-          const toastId = toast(t("تحذير"), {
-            description: t("هل أنت متأكد من الحذف؟"),
+          const toastId = toast(t("warning"), {
+            description: t("delete_product_confirmation"),
             action: (
               <div className="flex gap-2">
                 <Button size="sm" variant="outline" onClick={() => toast.dismiss(toastId)}>
@@ -77,7 +77,7 @@ export const baseColumns = ({
                   onClick={async () => {
                     const { success } = await deleteProductById(id);
                     if (success) {
-                      toast.success(t("تم الحذف بنجاح"));
+                      toast.success(t("delete_product_success"));
                       refresh();
                     }
                     toast.dismiss(toastId);

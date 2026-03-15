@@ -45,7 +45,6 @@ import useGettingAllSubArea from "@/services/subArea/gettingAllSubArea";
 import { AreaType, MainArea } from "@/types/areas";
 
 const AreasTable = () => {
-  // Getting all areas
   const {
     loading: mainAreasLoading,
     mainAreas,
@@ -53,7 +52,6 @@ const AreasTable = () => {
     error: mainAreasError
   } = useGettingAllMainAreas();
 
-  // Getting all secondary areas
   const {
     error: subAreasError,
     allSubArea,
@@ -69,7 +67,6 @@ const AreasTable = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  // Create refresh function
   const handleRefresh = React.useCallback(() => {
     if (selectedAreaType === "main") {
       getAllMainAreas();
@@ -78,14 +75,12 @@ const AreasTable = () => {
     }
   }, [selectedAreaType, getAllMainAreas, getAllSubArea]);
 
-  // Filter areas based on selected type
   const filteredAreas = React.useMemo<MainArea[]>(() => {
     if (selectedAreaType === "main") return mainAreas || [];
     if (selectedAreaType === "secondary") return allSubArea || [];
     return [];
   }, [selectedAreaType, mainAreas, allSubArea]);
 
-  // Get columns with proper refresh function
   const columns = React.useMemo(() => {
     return getColumns({
       areaType: selectedAreaType,
@@ -112,12 +107,10 @@ const AreasTable = () => {
     },
   });
 
-  // Load data when component mounts or area type changes
   useEffect(() => {
     handleRefresh();
   }, [selectedAreaType]);
 
-  // Handle loading states
   const isLoading = selectedAreaType === "main" ? mainAreasLoading : subAreasLoading;
   const hasError = selectedAreaType === "main" ? mainAreasError : subAreasError;
 

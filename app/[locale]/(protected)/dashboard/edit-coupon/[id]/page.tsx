@@ -28,10 +28,8 @@ const EditCoupon = () => {
   const id = params?.id as string;
   const isEdit = Boolean(id);
 
-  // getting coupon data
   const {coupon, getCouponById, loading: gettingCouponLoading, error: gettingCouponError} = useGettingCouponById()
 
-  // updating coupon data
   const {updateCoupon, loading: updatingCouponLoading} = useUpdateCoupon()
 
 

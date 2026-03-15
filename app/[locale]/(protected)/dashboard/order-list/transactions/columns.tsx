@@ -9,8 +9,7 @@ import { Link } from '@/i18n/routing';
 import { Orders } from "@/types/orders";
 import { formatDateToDMY } from "@/utils";
 import Cookies from "js-cookie";
-// import ChangeInventoryUserDialog from "@/components/partials/ChangeInventoryUserDialog/ChangeInventoryUserDialog";
-// import gettingAllOrders from "@/services/Orders/gettingAllOrders";
+
 import GenerateInvoiceButton from "@/components/partials/GenerateInvoiceButton/GenerateInvoiceButton";
 
 export const baseColumns = ({ refresh, t }: {
@@ -25,10 +24,8 @@ export const baseColumns = ({ refresh, t }: {
       accessorKey: "pharmacyName",
       header: t("pharmacyName"),
       cell: ({ row }) => {
-        // خذ الاسم مباشرة من البيانات الحالية للـ row
         const name = row.original.pharmacyName;
 
-        // لو الاسم مش موجود، اعرض "N/A"
         return (
           <div className="font-medium text-card-foreground/80">
             <span className="text-sm text-default-600 whitespace-nowrap">
@@ -45,12 +42,11 @@ export const baseColumns = ({ refresh, t }: {
       cell: ({ row }) => {
         const items = row.original.items || [];
 
-        // Get only unique inventory names
         const names = Array.from(
           new Set(
             items
               .map((item: any) => item.inventoryName)
-              .filter(Boolean) // remove null/undefined
+              .filter(Boolean) 
           )
         );
 
@@ -104,10 +100,8 @@ export const baseColumns = ({ refresh, t }: {
           4: "bg-indigo-200 text-indigo-700", // Shipped
           5: "bg-green-200 text-green-700",   // Delivered
           6: "bg-emerald-200 text-emerald-700", // Completed
-          // 7: "bg-gray-200 text-gray-700",     // Reassign
         };
 
-        // ✔ الحل النهائي
         const status = row.original.status;
 
         const statusStyle = statusColors[status] || "bg-gray-200 text-gray-700";
@@ -120,7 +114,6 @@ export const baseColumns = ({ refresh, t }: {
           4: "statusCode.shipped",
           5: "statusCode.delivered",
           6: "statusCode.completed",
-          // 7: "statusCode.reassigned",
         };
 
         const statusLabel = t(statusTranslationKeys[status] ?? "status.unknown");

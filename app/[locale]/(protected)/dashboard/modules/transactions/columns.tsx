@@ -38,7 +38,6 @@ export const baseColumns = ({t} : {
     enableHiding: false,
     cell: ({ row }) => {
       const id: string | number | undefined = row.original.id;
-        // eslint-disable-next-line react-hooks/rules-of-hooks
         const pathname = usePathname();
 
         const getHref = () => {
@@ -74,7 +73,7 @@ export const baseColumns = ({t} : {
                                         toast("module deleted", {
                                             description: "The module was deleted successfully.",
                                         });
-                                        // refresh()
+                                        
                                     }
                                 } catch (error) {
                                     toast.dismiss(toastId);

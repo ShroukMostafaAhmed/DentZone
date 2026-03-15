@@ -29,16 +29,12 @@ import useUpdateSubArea from "@/services/subArea/updateSubArea";
 
 
 const EditArea = () => {
-  // getting all main area
   const {loading: mainAreaLoading, mainAreas, getAllMainAreas, error: mainAreaError} = useGettingAllMainAreas()
 
-  // getting SubArea by id
   const {getSubAreaById, subArea, error: subAreaError, loading: subAreaLoading} = useGettingSubAreaById()
 
-  // update area
   const {loading: updateAreaLoading, updateMainArea, error: updateAreaError} = useUpdateMainArea()
 
-  // update subarea
   const {loading: updateSubAreaLoading, updateSubArea} = useUpdateSubArea()
 
   const router = useRouter();
@@ -52,17 +48,13 @@ const EditArea = () => {
   const [isActive, setIsActive] = useState(true);
   const [mainArea, setMainArea] = useState("");
 
-  // Helper function to convert backend isDeleted to frontend isActive
   const convertToIsActive = (isDeleted: boolean | undefined) => {
-    // If isDeleted is true or null, it means active
-    // If isDeleted is false, it means inactive
+ 
     return isDeleted === false ? false : true;
   };
 
-  // Helper function to convert frontend isActive to backend isDeleted
   const convertToIsDeleted = (isActive: boolean) => {
-    // If isActive is true, set isDeleted to true (active)
-    // If isActive is false, set isDeleted to false (inactive)
+  
     return isActive ? true : false;
   };
 
@@ -78,16 +70,14 @@ const EditArea = () => {
         setName(area.regionName);
         setLat(area.lat || "");
         setLang(area.lang || "");
-        // Convert backend isDeleted to frontend isActive
         setIsActive(convertToIsActive(area.isDeleted));
-        setMainArea(""); // reset main area
+        setMainArea(""); 
       }
 
       if (areaType === "secondary") {
 
         setName(subArea?.name || "");
         setMainArea(subArea?.regionId || "");
-        // Assuming subArea also has isDeleted field
         if (subArea?.isDeleted !== undefined) {
           setIsActive(convertToIsActive(subArea.isDeleted));
         }
@@ -101,7 +91,6 @@ const EditArea = () => {
       return;
     }
 
-    // Only validate lat/lang for main areas
     if (areaType === "main") {
       if (!lat.trim()) {
         toast.error("Validation Error", { description: "Latitude is required." });
@@ -124,13 +113,12 @@ const EditArea = () => {
     }
 
     try {
-      // Convert frontend isActive to backend isDeleted
       const isDeleted = convertToIsDeleted(isActive);
 
       const updateData = {
         regionName: name,
         isDeleted: isDeleted,
-        ...(areaType === "main" && { lat, lang }) // Only include lat/lang for main areas
+        ...(areaType === "main" && { lat, lang }) 
       };
 
       const {success, error} = areaType === "secondary" ? await updateSubArea(areaId, {
@@ -189,7 +177,7 @@ const EditArea = () => {
                     </Label>
                     <Select
                         value={mainArea}
-                        onValueChange={(value) => setMainArea(value)} // value is area.id
+                        onValueChange={(value) => setMainArea(value)} 
                     >
                       <SelectTrigger id="mainArea" className="flex-1">
                         <SelectValue placeholder="Main Area" />

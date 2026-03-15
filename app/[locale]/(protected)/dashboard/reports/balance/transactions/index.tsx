@@ -57,19 +57,14 @@ interface BalanceTableTypes {
 export default function TransactionsTable({type = "account"} : BalanceTableTypes) {
     const router = useRouter();
 
-    // using custom hook to fetch transactions reports
     const {transactions, fetchTransactions, loading: loadingTransactions} = useTransactionBalance()
 
-    // using custom hook to fetch balance reports
     const {loading: loadingBalances, balances, gettingAccountBalances} = useAccountBalance()
 
-    // using custom hook to fetch summary reports
     const {loading: loadingSummary, summary, fetchBalanceSummary} = useBalanceSummary()
 
-    // getting all users
     const {loading: loadingGettingAllUsers, gettingAllUsers, data} = GetUsers()
 
-    // State for filter values
     const [dateRange, setDateRange] = useState<DateRange | undefined>({
         from: subDays(new Date(), 30),
         to: new Date(),
@@ -86,7 +81,6 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
     const [rowSelection, setRowSelection] = React.useState({});
 
 
-    // Get the appropriate data based on type
     const getCurrentData = () => {
         switch (type) {
             case "transaction":
@@ -94,13 +88,12 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
             case "account":
                 return balances;
             case "summary":
-                return null; // Summary doesn't have items array
+                return null; 
             default:
                 return balances;
         }
     };
 
-    // Get the appropriate loading state based on type
     const getCurrentLoading = () => {
         switch (type) {
             case "transaction":
@@ -120,7 +113,6 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
     const fetchData = () => {
         const params = new URLSearchParams();
 
-        // Add filters only if they have values
         if (dateRange?.from) {
             params.set('StartDate', dateRange.from.toISOString());
         }
@@ -137,13 +129,11 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
             params.set('TransactionType', transactionType);
         }
 
-        // Always add pagination params
         params.set('PageNumber', pageNumber.toString());
         params.set('PageSize', pageSize.toString());
 
         console.log(`${type} params:`, params.toString());
 
-        // Call the appropriate API based on type
         switch (type) {
             case "transaction":
                 fetchTransactions(params.toString());
@@ -178,19 +168,17 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
         },
     });
 
-    // Fetch dropdown data on mount
     useEffect(() => {
         gettingAllUsers();
     }, []);
 
-    // Fetch data when page number or page size changes
     useEffect(() => {
         fetchData();
     }, [pageNumber, pageSize, type]);
 
 
     const handleApplyFilters = () => {
-        setPageNumber(1); // Reset to first page when filters change
+        setPageNumber(1); 
         fetchData();
     };
 
@@ -239,7 +227,6 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
                 <Label>{getTableTitle()} - Filters</Label>
                 <hr className="border-default-200" />
 
-                {/* Date Range Picker */}
                 <div className="flex flex-row items-center justify-center gap-2">
                     <Label htmlFor="date">Date Range</Label>
                     <Popover>
@@ -280,7 +267,6 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
                     </Popover>
                 </div>
 
-                {/* User Select */}
                 <div className="flex items-center gap-2">
                     <Label htmlFor="user">User</Label>
                     <Select
@@ -302,7 +288,6 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
                     </Select>
                 </div>
 
-                {/* Account Type Filter - Show for account and summary types */}
                 {(type === "account" || type === "summary") && (
                     <div className="flex items-center gap-2">
                         <Label htmlFor="accountType">Account Type</Label>
@@ -331,7 +316,6 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
                     </div>
                 )}
 
-                {/* Transaction Type Filter - Show for transaction and summary types */}
                 {(type === "transaction" || type === "summary") && (
                     <div className="flex items-center gap-2">
                         <Label htmlFor="transactionType">Transaction Type</Label>
@@ -461,7 +445,6 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
                 </CardContent>
             )}
 
-            {/* Custom pagination that works with the API - Only show for account and transaction types */}
             {type !== "summary" && currentData && (
                 <div className="flex flex-col sm:flex-row items-center justify-between p-4 gap-4">
                     <div className="flex items-center gap-2">
@@ -472,7 +455,7 @@ export default function TransactionsTable({type = "account"} : BalanceTableTypes
                             value={pageSize.toString()}
                             onValueChange={(value) => {
                                 setPageSize(Number(value));
-                                setPageNumber(1); // Reset to first page when page size changes
+                                setPageNumber(1);
                             }}
                         >
                             <SelectTrigger className="h-8 w-[70px]">

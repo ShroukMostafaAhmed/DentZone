@@ -12,7 +12,6 @@ import useCreateMainCategories from "@/services/MainCategories/createMainCategor
 import { useTranslations } from "next-intl";
 
 const AddModule = () => {
-  // creating new module
   const {loading, createMainCategory} = useCreateMainCategories()
   const t = useTranslations("Module");
 

@@ -43,7 +43,7 @@ const OverviewChart = ({
             fontWeight: 700,
             color: mode === 'light' ? colors["default-600"] : colors["default-300"],
             formatter: function (val: number) {
-              return val.toLocaleString(); // ✅ show value instead of %
+              return val.toLocaleString();
             },
           },
           total: {
@@ -68,7 +68,7 @@ const OverviewChart = ({
       theme: mode === "dark" ? "dark" : "light",
       y: {
         formatter: function (value: number) {
-          return value.toLocaleString(); // ✅ display raw value, not percent
+          return value.toLocaleString(); 
         },
       },
     },

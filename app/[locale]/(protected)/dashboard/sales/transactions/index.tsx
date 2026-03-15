@@ -57,7 +57,7 @@ interface TransactionsTableProps {
     type: "pharmacy" | "inventory" | "area" | "status" | "summary";
 }
 
-// Utility functions for formatting
+
 const formatCurrency = (amount: number): string => {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -72,22 +72,22 @@ const formatNumber = (num: number): string => {
 
 export default function TransactionsTable({ type = "area" }: TransactionsTableProps) {
     const router = useRouter();
-    // using custom hook to fetch order reports
+    
     const {loading: loadingOrderReports, orderReports, fetchOrderReports} = useOrderReports();
 
-    // using custom hook to fetch summary reports
+    
     const {loading: loadingSummaryReports, summaryReports, fetchSummaryReports, error} = useSummaryReports()
 
-    // getting users by role id
+    
     const {loading: loadingUsers, error: errorUsers, users, getUsersByRoleId} = useGetUsersByRoleId()
 
-    // getting regions
+    
     const {loading: loadingMainAreas, error: errorMainAreas, mainAreas, getAllMainAreas} = useGettingAllMainAreas()
 
-    // getting all pharmacy users
+    
     const {loading: loadingPharmacies, error: errorPharmacies, pharmacies, gettingAllPharmacies} = useGettingAllPharmacies()
 
-    // handling the type of transactions filter
+    
     const showDateRange = ["pharmacy", "inventory", "area", "status", "summary"].includes(type);
     const showPharmacyUser = type === "pharmacy";
     const showInventoryUser = type === "inventory";
@@ -96,7 +96,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
     const showPaymentMethod = false;
     const isSummary = type === "summary";
 
-    // State for filter values
+    
     const [dateRange, setDateRange] = useState<DateRange | undefined>({
         from: subDays(new Date(), 30),
         to: new Date(),
@@ -135,7 +135,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
         },
     });
 
-    // Fetch dropdown data on mount
+    
     useEffect(() => {
         const fetchDataInitail = async () => {
             try {
@@ -150,7 +150,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
         gettingAllPharmacies()
     }, []);
 
-    // Fetch data when page number or page size changes
+    
     useEffect(() => {
         fetchData();
     }, [pageNumber, pageSize]);
@@ -177,7 +177,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
             params.set('Status', status.toString());
         }
 
-        // Only add pagination params for non-summary types
+        
         if (!isSummary) {
             params.set('PageNumber', pageNumber.toString());
             params.set('PageSize', pageSize.toString());
@@ -185,7 +185,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
 
         console.log(params.toString())
 
-        // Call the appropriate API based on type
+        
         if (isSummary) {
             fetchSummaryReports(params.toString());
         } else {
@@ -194,7 +194,8 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
     };
 
     const handleApplyFilters = () => {
-        setPageNumber(1); // Reset to first page when filters change
+        setPageNumber(1); 
+        
         fetchData();
     };
 
@@ -232,7 +233,8 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                 <div className="px-5 py-4 flex flex-col gap-4">
                     <Label>Filters</Label>
                     <hr className="border-default-200" />
-                    {/* Date Range Picker */}
+               
+               
                     {showDateRange && (
                         <div className="flex flex-row items-center justify-center gap-2">
                             <Label htmlFor="date">Date Range</Label>
@@ -277,7 +279,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                         </div>
                     )}
 
-                    {/* Pharmacy User Select */}
+
                     {showPharmacyUser && pharmacies.length > 0 && (
                         <div className="flex items-center gap-2">
                             <Label htmlFor="pharmacyUser">Pharmacy User</Label>
@@ -302,7 +304,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                         </div>
                     )}
 
-                    {/* Inventory User Select */}
+
                     { showInventoryUser && users.length > 0 && (
                         <div className="flex items-center gap-2">
                             <Label htmlFor="inventoryUser">Inventory User</Label>
@@ -327,7 +329,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                         </div>
                     )}
 
-                    {/* Region Select */}
+
                     { showRegion && mainAreas.length > 0 && (
                         <div className="flex items-center gap-2">
                             <Label htmlFor="region">Region</Label>
@@ -351,7 +353,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                         </div>
                     )}
 
-                    {/* Status Filter */}
+
                     { showStatus && (
                         <div className="flex items-center gap-2">
                             <Label htmlFor="status">Status</Label>
@@ -384,7 +386,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                         </div>
                     )}
 
-                    {/* Payment Method Filter */}
+
                     { showPaymentMethod && (
                         <div className="flex items-center gap-2">
                             <Label htmlFor="paymentMethod">Payment Method</Label>
@@ -428,7 +430,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                 </div>
             </Card>
 
-            {/* Summary Cards */}
+
             {isSummary && (
                 <>
                     {loadingSummaryReports ? (
@@ -499,7 +501,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                         </div>
                     ) : null}
 
-                    {/* Summary Table */}
+
                     {summaryReports && (
                         <Card>
                             <CardHeader>
@@ -582,7 +584,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                 </>
             )}
 
-            {/* Regular Orders Table */}
+
             {!isSummary && (
                 <>
                     {loadingOrderReports ? (
@@ -644,7 +646,7 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                         </Card>
                     )}
 
-                    {/* Custom pagination that works with the API */}
+
                     {orderReports && (
                         <Card>
                             <div className="flex flex-col sm:flex-row items-center justify-between p-4 gap-4">
@@ -656,7 +658,8 @@ export default function TransactionsTable({ type = "area" }: TransactionsTablePr
                                         value={pageSize.toString()}
                                         onValueChange={(value) => {
                                             setPageSize(Number(value));
-                                            setPageNumber(1); // Reset to first page when page size changes
+                                            setPageNumber(1); 
+                                            
                                         }}
                                     >
                                         <SelectTrigger className="h-8 w-[70px]">

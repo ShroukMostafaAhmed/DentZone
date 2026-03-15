@@ -91,7 +91,7 @@ const RemoveItems: React.FC = () => {
       </div>
     ),
     {
-      duration: 0, // Don't auto-dismiss
+      duration: 0, 
       position: 'top-center',
     }
   );
@@ -106,14 +106,13 @@ const RemoveItems: React.FC = () => {
       });
 
       if (success) {
-        // Update local state
+      
         setDeletedItems((prev) => [...prev, itemId]);
         setItems((prev) => prev.filter((item) => item.productId !== itemId));
         setHasChanges(true);
 
         toast.success(t("itemRemoved"));
 
-        // Refresh the order data
         setTimeout(() => {
           getOrderById(id);
         }, 1000);
@@ -174,8 +173,8 @@ const RemoveItems: React.FC = () => {
                     orderId={id}
                     itemIds={selectedItemIds}
                     onSuccess={() => {
-                      getOrderById(id); // re-fetch data
-                      setSelectedItemIds([]); // reset selection
+                      getOrderById(id); 
+                      setSelectedItemIds([]);
                     }}
                 />
               </div>
@@ -216,7 +215,7 @@ const RemoveItems: React.FC = () => {
                 </div>
               </div>
               <div className="space-y-1 text-xs text-default-600 uppercase">
-                {/*<h4>Order Id: {order.id || 'N/A'}</h4>*/}
+             
               <h4>{t("deliverDate")}: {formatOrderDate(order.orderDate)}</h4>
                 <h4>
                     {t("status")}:{" "}

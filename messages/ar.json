@@ -612,6 +612,8 @@
     "ArabicName": "الاسم بالعربية",
     "arabicPreef": "الوصف بالعربية",
     "arabicCategory": "الفئة بالعربية",
+    "arabicDescription": "الوصف بالعربية",
+
     "unknown": "غير معروف",
     "category": "الفئة",
     "brand": "العلامة التجارية",
@@ -624,6 +626,7 @@
     "ChooseFile": "اختر ملف",
     "error": "حدث خطاً",
     "activeIngredient": "المكون النشط",
+    "delete_product_confirmation" :"هل انت متاكد من حذف المنتج",
     "productPref": "الوصف",
      "chooseFile": "اختر ملف",
     "price": "السعر",

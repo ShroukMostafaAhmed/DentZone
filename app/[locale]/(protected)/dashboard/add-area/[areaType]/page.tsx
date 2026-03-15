@@ -26,11 +26,10 @@ import MapSelector from "@/components/partials/MapSelector/MapSelector";
 import gettingAllMainAreas from "@/services/area/gettingAllMainAreas";
 import {Loader2} from "lucide-react";
 const AddArea = () => {
-  // getting all main areas
+
 
   const {loading: gettingMainAreaLoading, mainAreas, getAllMainAreas} = useGettingAllMainAreas()
 
-  // creating new area (main or secondary)
   const {loading: subAreaLoading, createSubArea} = useCreateSubArea()
   const {loading: mainAreaLoading, createMainArea} = useCreateMainArea()
 
@@ -70,8 +69,6 @@ const AddArea = () => {
       }
       return;
     }
-
-    // For secondary areas
     if (!name.trim() || !mainArea.trim()) {
       toast.error("Validation Error", {
         description: "Sub-area name and main area are required.",

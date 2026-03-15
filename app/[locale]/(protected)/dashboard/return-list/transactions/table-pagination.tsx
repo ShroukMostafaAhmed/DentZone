@@ -14,7 +14,7 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
     const pages = [];
     
     if (totalPages <= 7) {
-      // Show all pages if total is 7 or less
+      
       for (let i = 0; i < totalPages; i++) {
         pages.push(
           <Button
@@ -30,7 +30,7 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
         );
       }
     } else {
-      // Always show first page
+      
       pages.push(
         <Button
           key="page-0"
@@ -45,7 +45,7 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
       );
 
       if (currentPage <= 3) {
-        // Show pages 2, 3, 4 if we're near the beginning
+        
         for (let i = 1; i <= Math.min(3, totalPages - 2); i++) {
           pages.push(
             <Button
@@ -61,7 +61,7 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
           );
         }
         
-        // Add dots if there's a gap
+        
         if (totalPages > 5) {
           pages.push(
             <span key="dots-end" className="px-2 text-default-500">
@@ -70,14 +70,14 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
           );
         }
       } else if (currentPage >= totalPages - 4) {
-        // Add dots at the beginning
+        
         pages.push(
           <span key="dots-start" className="px-2 text-default-500">
             ...
           </span>
         );
         
-        // Show last few pages if we're near the end
+        
         for (let i = Math.max(totalPages - 4, 1); i < totalPages - 1; i++) {
           pages.push(
             <Button
@@ -93,14 +93,14 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
           );
         }
       } else {
-        // We're in the middle - show dots, current page area, dots
+        
         pages.push(
           <span key="dots-start" className="px-2 text-default-500">
             ...
           </span>
         );
         
-        // Show current page and adjacent pages
+        
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pages.push(
             <Button
@@ -122,8 +122,7 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
           </span>
         );
       }
-
-      // Always show last page (if it's not already shown)
+      
       if (totalPages > 1) {
         pages.push(
           <Button
@@ -169,7 +168,7 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
         </Button>
       </div>
       
-      {/* Optional: Show current page info */}
+      
       <div className="text-sm text-muted-foreground">
         Page {currentPage + 1} of {totalPages}
       </div>

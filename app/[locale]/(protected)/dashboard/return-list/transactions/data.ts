@@ -1,4 +1,4 @@
-// import { DataProps } from "./columns";
+
 export const data: any[] = [
   {
     id: 1,

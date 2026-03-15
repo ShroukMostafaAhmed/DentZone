@@ -18,7 +18,6 @@ const AddCategory = () => {
   const t = useTranslations("categories");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // States
   const [name, setName] = useState("");
   const [arabicName, setArabicName] = useState("");
   const [pref, setPref] = useState("");
@@ -32,13 +31,11 @@ const AddCategory = () => {
   };
 
   const addCategory = async () => {
-    // التحقق من الحقول المطلوبة بناءً على الـ Swagger
     if (!name.trim() || !arabicName.trim() || !pref.trim() || !description.trim()) {
       toast.error(t("validationError"), { description: t("fill_all_fields") });
       return;
     }
 
-    // إعداد البيانات كـ FormData لدعم رفع الملفات
     const formData = new FormData();
     formData.append("Name", name);
     formData.append("ArabicName", arabicName);
@@ -50,7 +47,6 @@ const AddCategory = () => {
     }
 
     try {
-      // إرسال الـ formData مباشرة (استخدام any لتجنب تعارض أنواع TypeScript مع الـ Hook)
       const success = await (creatingCategory as any)(formData);
       
       if (success) {
@@ -76,7 +72,6 @@ const AddCategory = () => {
 
           <CardContent className="space-y-6">
             
-            {/* Arabic Name */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="categoryArabicName">
                 {t("category_arabic_name")}
@@ -90,7 +85,6 @@ const AddCategory = () => {
               />
             </div>
 
-            {/* English Name */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="categoryName">
                 {t("category_name")}
@@ -104,7 +98,6 @@ const AddCategory = () => {
               />
             </div>
 
-            {/* Preference */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="categoryPref">
                 {t("pref")}
@@ -118,7 +111,6 @@ const AddCategory = () => {
               />
             </div>
 
-            {/* Description */}
             <div className="flex items-start flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium mt-3" htmlFor="categoryDescription">
                 {t("description")}
@@ -132,7 +124,6 @@ const AddCategory = () => {
               />
             </div>
 
-            {/* Image Upload - تم التعديل ليطابق الحقول السابقة تماماً */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="imageFile">
                 {t("category_image")}

@@ -37,7 +37,6 @@ import gettingAllMainCategories from "@/services/MainCategories/gettingAllMainCa
 import { useTranslations } from "next-intl";
 
 const TransactionsTable = () => {
-  // getting all modules
   const {loading: loadingMainCategories, getAllMainCategories, mainCategories, error} = useGettingAllMainCategories()
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -48,7 +47,6 @@ const TransactionsTable = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  // getting all Modules as mounted
 
   const t = useTranslations("Module");
 
@@ -75,12 +73,10 @@ const TransactionsTable = () => {
     },
   });
 
-  // getting all main categories as mounted
   useEffect(() => {
     getAllMainCategories()
   }, []);
 
-  // filtering data
     useEffect(() => {
         if (mainCategories) {
           setFilteredModule(mainCategories);

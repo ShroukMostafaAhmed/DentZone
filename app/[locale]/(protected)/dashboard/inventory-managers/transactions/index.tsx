@@ -31,7 +31,6 @@ import useGetUsersByRoleId from "@/services/users/GetUsersByRoleId";
 import SearchInput from "@/app/[locale]/(protected)/components/SearchInput/SearchInput";
 
 const TransactionsTable = () => {
-  // getting all users by role id
   const {loading: usersLoading, users, getUsersByRoleId} = useGetUsersByRoleId()
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -76,7 +75,6 @@ const TransactionsTable = () => {
     }
   }, []);
 
-  // checking if the data is loading or not
   if ( usersLoading == true) {
     return (
         <div className="flex justify-center items-center">

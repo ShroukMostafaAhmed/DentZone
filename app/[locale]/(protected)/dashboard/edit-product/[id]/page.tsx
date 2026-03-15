@@ -10,10 +10,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
-import { Loader2, Upload, FileImage } from "lucide-react";
+import { Loader2, Upload, FileImage, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-// Hooks
 import useGettingProductById from "@/services/products/gettingProductById";
 import GetCategories from "@/services/categories/getCategories";
 import useUpdateProductById from "@/services/products/UpdateProductById";
@@ -33,9 +32,12 @@ const EditProduct = () => {
     name: "",
     arabicName: "",
     pref: "",
+    arabicPreef: "",
     description: "",
+    arabicDescription: "",
     categoryId: "",
-    image: null as File | null,
+    images: [] as File[],
+    existingImages: [] as string[],
   });
 
   useEffect(() => {
@@ -46,45 +48,60 @@ const EditProduct = () => {
   useEffect(() => {
     if (product) {
       setFormData({
-        name: product.name || "",
-        arabicName: product.arabicName || "",
+        name: product.productName || "",
+        arabicName: product.productArabicName || "",
         pref: product.preef || "",
+        arabicPreef: product.arabicPreef || "",
         description: product.description || "",
-        // حماية من الـ Runtime Error عبر Optional Chaining
-        categoryId: product.category?.id ? String(product.category.id) : "",
-        image: null, 
+        arabicDescription: product.arabicDescription || "",
+        categoryId: product.categoryId ? String(product.categoryId) : "",
+        images: [],
+        existingImages: product.images?.map((img: any) => img.imageName) || [],
       });
     }
   }, [product]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      setFormData({ ...formData, image: e.target.files[0] });
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...newFiles],
+      }));
     }
   };
 
+  const removeNewImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleUpdate = async () => {
-    // التحقق من الحقول الأساسية فقط (بدون Active Ingredient)
     if (!formData.name || !formData.categoryId) {
       toast.error(t("fill_all_fields"));
       return;
     }
 
-    // تجهيز البيانات كـ FormData بناءً على Swagger
     const data = new FormData();
     data.append("Name", formData.name);
     data.append("ArabicName", formData.arabicName);
     data.append("Preef", formData.pref);
+    data.append("ArabicPreef", formData.arabicPreef);
     data.append("Description", formData.description);
+    data.append("ArabicDescription", formData.arabicDescription);
     data.append("CategoryId", formData.categoryId);
-    
-    if (formData.image) {
-      data.append("Photo", formData.image); 
+
+    if (formData.images.length > 0) {
+      formData.images.forEach((file) => {
+        data.append("Photos", file);
+      });
     }
 
     try {
-      const { success } = await (updatingProductById as any)(productId, data);
-      if (success) {
+      const response = await (updatingProductById as any)(productId, data);
+      if (response) {
         toast.success(t("Product updated successfully"));
         router.push('/dashboard/product-list');
       }
@@ -110,65 +127,42 @@ const EditProduct = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Arabic Name */}
-            <div className="flex items-center flex-wrap gap-2">
-              <Label className="w-[180px] flex-none text-sm font-medium">{t("arabicName")}</Label>
-              <Input 
-                className="flex-1 min-w-[300px]"
-                placeholder={t("arabicName")}
-                value={formData.arabicName} 
-                onChange={(e) => setFormData({...formData, arabicName: e.target.value})} 
-              />
-            </div>
-
-            {/* Product Name */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium">{t("productName")}</Label>
               <Input 
                 className="flex-1 min-w-[300px]"
-                placeholder={t("productName")}
                 value={formData.name} 
                 onChange={(e) => setFormData({...formData, name: e.target.value})} 
               />
             </div>
 
-            {/* Product Preference */}
+            <div className="flex items-center flex-wrap gap-2">
+              <Label className="w-[180px] flex-none text-sm font-medium">{t("arabicName")}</Label>
+              <Input 
+                className="flex-1 min-w-[300px]"
+                value={formData.arabicName} 
+                onChange={(e) => setFormData({...formData, arabicName: e.target.value})} 
+              />
+            </div>
+
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium">{t("productPref")}</Label>
               <Input 
                 className="flex-1 min-w-[300px]"
-                placeholder={t("productPref")}
                 value={formData.pref} 
                 onChange={(e) => setFormData({...formData, pref: e.target.value})} 
               />
             </div>
 
             <div className="flex items-center flex-wrap gap-2">
-              <Label className="w-[180px] flex-none text-sm font-medium">{t("productPhoto")}</Label>
-              <div className="flex-1 min-w-[300px] flex items-center gap-3">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  <FileImage className="w-4 h-4 mr-2" />
-                  {t("chooseFile") || "Choose File"}
-                </Button>
-                <span className="text-sm text-muted-foreground truncate">
-                  {formData.image ? formData.image.name : "No file chosen"}
-                </span>
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  className="hidden" 
-                  accept="image/*" 
-                  onChange={handleFileChange} 
-                />
-              </div>
+              <Label className="w-[180px] flex-none text-sm font-medium">{t("arabicPreef")}</Label>
+              <Input 
+                className="flex-1 min-w-[300px]"
+                value={formData.arabicPreef} 
+                onChange={(e) => setFormData({...formData, arabicPreef: e.target.value})} 
+              />
             </div>
 
-            {/* Category Select */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium">{t("category")}</Label>
               <Select 
@@ -186,17 +180,82 @@ const EditProduct = () => {
               </Select>
             </div>
 
-            {/* Description */}
             <div className="flex items-start flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium mt-3">{t("description")}</Label>
               <Textarea 
                 className="flex-1 min-w-[300px]"
-                placeholder={t("description")}
                 value={formData.description} 
                 onChange={(e) => setFormData({...formData, description: e.target.value})} 
               />
             </div>
 
+            <div className="flex items-start flex-wrap gap-2">
+              <Label className="w-[180px] flex-none text-sm font-medium mt-3">{t("arabicDescription")}</Label>
+              <Textarea 
+                className="flex-1 min-w-[300px]"
+                value={formData.arabicDescription} 
+                onChange={(e) => setFormData({...formData, arabicDescription: e.target.value})} 
+              />
+            </div>
+
+            {formData.existingImages.length > 0 && (
+              <div className="flex items-start flex-wrap gap-2">
+                <Label className="w-[180px] flex-none text-sm font-medium mt-2">Current Photos</Label>
+                <div className="flex flex-wrap gap-2">
+                  {formData.existingImages.map((url, idx) => (
+                    <div key={idx} className="relative w-24 h-24 border rounded-md overflow-hidden bg-muted">
+                      <img src={url} alt="product" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-start flex-wrap gap-2">
+              <Label className="w-[180px] flex-none text-sm font-medium mt-2">{t("productPhoto")}</Label>
+              <div className="flex-1 min-w-[300px] space-y-4">
+                <div className="flex items-center gap-3">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  >
+                    <FileImage className="w-4 h-4 mr-2" />
+                    {t("chooseFile") || "Upload Photos"}
+                  </Button>
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    className="hidden" 
+                    accept="image/*" 
+                    multiple 
+                    onChange={handleFileChange} 
+                  />
+                </div>
+
+                {formData.images.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {formData.images.map((file, index) => (
+                      <div key={index} className="relative w-24 h-24 border rounded-md group">
+                        <img 
+                          src={URL.createObjectURL(file)} 
+                          className="w-full h-full object-cover rounded-md" 
+                          alt="preview"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeNewImage(index)}
+                          className="absolute -top-2 -right-2 bg-destructive text-white rounded-full p-0.5 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

@@ -10,14 +10,12 @@ function useGettingAllProducts() {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-  // Get all products at once (for client-side pagination - current behavior)
   const getAllProducts = async (includeDeleted: string) => {
     setLoading(true);
     setError(null);
     setIncludeDeletedState(includeDeleted);
 
     try {
-      // Fetch first page to get total count
       const firstResponse = await AxiosInstance.get(
         `/api/Products/GetProducts?includeDeleted=${includeDeleted}&page=1&size=50`
       );
@@ -39,7 +37,6 @@ function useGettingAllProducts() {
           return;
         }
 
-        // Extract pagination info (totalPages, totalItems)
         const totalPages = firstResponse.data.totalPages || 1;
         const totalItems = firstResponse.data.totalItems || firstResponse.data.data.length;
 
@@ -48,7 +45,6 @@ function useGettingAllProducts() {
 
         let allProducts = [...firstResponse.data.data];
 
-        // Fetch remaining pages if there are more
         if (totalPages > 1) {
           const requests = [];
           for (let page = 2; page <= totalPages; page++) {
@@ -110,8 +106,8 @@ function useGettingAllProducts() {
     products,
     includeDeleted: includeDeletedState,
     setIncludeDeletedState,
-    totalItems, // Return totalItems
-    totalPages, // Return totalPages
+    totalItems, 
+    totalPages, 
   };
 }
 

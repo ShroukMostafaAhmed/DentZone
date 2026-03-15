@@ -16,7 +16,6 @@ import { useTranslations } from "next-intl";
 function AddProductPrice() {
   const t = useTranslations("inventoryManagement");
 
-  // getting all products
   const {
     loading: gettingAllProductsLoading,
     getProductById,
@@ -27,7 +26,6 @@ function AddProductPrice() {
   const params = useParams();
   const productId = params?.id as string;
 
-  // states for product
   const [purchasePrice, setPurchasePrice] = useState<number | string>("");
   const [salesPrice, setSalesPrice] = useState<number | string>("");
   const [stock, setStock] = useState<number>(0);
@@ -37,14 +35,12 @@ function AddProductPrice() {
     product?.category?.name as string
   );
 
-  // Creating new Product price
   const {
     error: productPriceError,
     loading: productPriceLoading,
     createProductPrice,
   } = useCreateProductPrice();
 
-  // on submit
   const onSubmit = async () => {
     if (!purchasePrice) {
       toast.error(t("purchasePriceValidation"));
@@ -79,20 +75,18 @@ function AddProductPrice() {
 
       if (success) {
         toast.success(t("productPriceAdded"), {
-          duration: 1500, // customize duration if needed
+          duration: 1500,
         });
 
-        // Redirect after delay
         setTimeout(() => {
           router.push("/dashboard/product-list");
-        }, 1500); // Wait for toast to appear
+        }, 1500); 
       }
     } catch (error: any) {
       toast.error(t("productPriceAddFailed"));
     }
   };
 
-  // mounted data
   useEffect(() => {
     getProductById(productId);
   }, [categoryId]);
@@ -192,7 +186,7 @@ function AddProductPrice() {
                   value={discount}
                   onChange={(e) => {
                     const input = parseFloat(e.target.value);
-                    const value = Math.min(input, 100); // Clamp to max 100
+                    const value = Math.min(input, 100);
                     setDiscount(value);
 
                     if (salesPrice) {
@@ -203,7 +197,7 @@ function AddProductPrice() {
                       );
                     }
                   }}
-                  className="pr-10" // padding-right for icon space
+                  className="pr-10"
                 />
                 <span className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-500 text-sm">
                   %

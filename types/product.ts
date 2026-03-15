@@ -1,6 +1,5 @@
 import { Price } from "@/types/price";
 import { CategoryType } from "@/types/category";
-import { ActiveIngredient } from "@/types/activeIngredient";
 
 export type ProductType = {
     id?: string,
@@ -12,8 +11,9 @@ export type ProductType = {
     preef: string,
     arabicPreef?: string,
     description: string,
+    arabicDescription?: string,
     category: CategoryType,
-    activeIngredient: ActiveIngredient,
-    image: any,
+    categoryId: string,
+    images: any,
     prices?: Price[]
 }

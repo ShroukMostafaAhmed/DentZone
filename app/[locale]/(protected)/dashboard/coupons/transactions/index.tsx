@@ -36,7 +36,6 @@ import {Coupon} from "@/types/coupons";
 
 const TransactionsTable = () => {
   const router = useRouter()
-  // getting all coupons
   const {loading: gettingAllCouponsLoading, error: gettingAllCouponsError, coupons, getAllCoupons} = useGettingAllCoupons()
 
   const [sorting, setSorting] = React.useState<SortingState>([]);

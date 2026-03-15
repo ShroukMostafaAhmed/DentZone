@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import GetCategories from "@/services/categories/getCategories";
-import { Loader2, X } from "lucide-react"; // أضفت X لحذف الصور
+import { Loader2, X } from "lucide-react";
 import useCreateProduct from "@/services/products/createProduct";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
@@ -33,7 +33,6 @@ const AddProduct = () => {
   const [arabicDescription, setArabicDescription] = useState<string>("");
   const [categoryId, setCategoryId] = useState<string>("");
   
-  // تغيير من ملف واحد إلى مصفوفة ملفات
   const [photos, setPhotos] = useState<File[]>([]);
   
   const [categorySearch, setCategorySearch] = useState<string>("");
@@ -55,15 +54,12 @@ const AddProduct = () => {
     }
   }, [categorySearch, data]);
 
-  // دالة التعامل مع رفع ملفات متعددة
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       setPhotos((prev) => [...prev, ...newFiles]);
     }
   };
-
-  // دالة لحذف صورة مختارة قبل الرفع
   const removePhoto = (index: number) => {
     setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
@@ -83,12 +79,9 @@ const AddProduct = () => {
     formData.append("ArabicDescription", arabicDescription);
     formData.append("CategoryId", categoryId);
     
-    // إضافة كل الصور إلى FormData تحت نفس الاسم "Photos" ليراها الـ API كمصفوفة
     photos.forEach((file) => {
       formData.append("Photos", file);
     });
-
-    // إرسال اسم أول صورة كـ ImageName (اختياري حسب منطق الـ Backend لديك)
     if (photos.length > 0) {
       formData.append("ImageName", photos[0].name);
     }
@@ -163,18 +156,17 @@ const AddProduct = () => {
                 </Select>
               </div>
               
-              {/* قسم رفع الصور المتعددة */}
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <Label className="w-[120px]">{t("productPhoto")}</Label>
                   <Input 
                     type="file" 
                     accept="image/*" 
-                    multiple // تسمح باختيار أكثر من ملف
+                    multiple
                     onChange={handleFileChange} 
                   />
                 </div>
-                {/* عرض قائمة الصور المختارة */}
+            
                 {photos.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-2 ml-[120px]">
                     {photos.map((file, index) => (

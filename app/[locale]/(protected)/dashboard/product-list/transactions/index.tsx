@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TablePagination from "./table-pagination";
+import { useParams } from "next/navigation";
 import { CardContent } from "@/components/ui/card";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,9 @@ import ExcelUploadButton from "@/app/[locale]/(protected)/dashboard/add-product-
 
 const TransactionsTable = () => {
   const t = useTranslations("productList");
+  const params = useParams();
+  const locale = params?.locale as string;
+  
   const userRole = Cookies.get("userRole");
   const userId = Cookies.get("userId");
 
@@ -64,7 +68,7 @@ const TransactionsTable = () => {
   const [rowSelection, setRowSelection] = React.useState({});
   const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
 
-  const columns = baseColumns({ refresh: () => getAllProducts("false"), t });
+  const columns = baseColumns({ refresh: () => { getAllProducts("false") }, t, locale });
 
   const table = useReactTable({
     data: filteredProducts ?? [],

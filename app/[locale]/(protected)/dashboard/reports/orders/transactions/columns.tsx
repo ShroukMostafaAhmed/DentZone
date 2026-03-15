@@ -53,7 +53,6 @@ export const baseColumns = ({refresh} : {refresh: () => void}) : ColumnDef<any>[
     accessorKey: "status",
     header: "Order Status",
     cell: ({ row }) => {
-      // Map status numbers to class names
       const statusColors: Record<string, string> = {
         "Pending": "bg-yellow-200 text-yellow-700", // Pending
         "Approved": "bg-blue-200 text-blue-700",     // Approved
@@ -64,7 +63,6 @@ export const baseColumns = ({refresh} : {refresh: () => void}) : ColumnDef<any>[
         "Completed": "bg-emerald-200 text-emerald-700", // Completed
       };
 
-      // Map status numbers to display names
       const statusLabels: Record<string, string> = {
         "Pending": "Pending",
         "Approved": "Approved",
@@ -90,7 +88,6 @@ export const baseColumns = ({refresh} : {refresh: () => void}) : ColumnDef<any>[
     accessorKey: "deliverDate",
     header: "Deliver Date",
     cell: ({ row }) => {
-    // Check if deliverDate is null or undefined
         if (!row.original.deliverDate) {
             return <span className="text-gray-500">No Date Scheduled Yet</span>;
         }

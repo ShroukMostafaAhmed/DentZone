@@ -37,10 +37,10 @@ import {Button} from "@/components/ui/button";
 import {OrderStatus, OrderStatusLabel, UserRole, UserRoleLabel} from "@/enum";
 
 const TransactionsTable = () => {
-  // getting all users hooks
+  
   const {data, loading, gettingAllUsers} = GetUsers()
 
-  // getting users by role id hooks
+  
   const {users: usersByRole, loading: loadingByRole, getUsersByRoleId} = useGetUsersByRoleId()
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -49,7 +49,7 @@ const TransactionsTable = () => {
   );
   const [selectedRole, setSelectedRole] = useState<"all" | UserRole>("all");
 
-// Update filteredUsers when data changes
+  
   useEffect(() => {
     if (selectedRole === "all" && data) {
       setFilteredUsers(data);

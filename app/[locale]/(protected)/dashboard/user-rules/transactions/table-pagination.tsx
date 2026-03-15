@@ -14,7 +14,6 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
     const pages = [];
     
     if (totalPages <= 7) {
-      // Show all pages if total is 7 or less
       for (let i = 0; i < totalPages; i++) {
         pages.push(
           <Button
@@ -30,7 +29,6 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
         );
       }
     } else {
-      // Always show first page
       pages.push(
         <Button
           key="page-0"
@@ -45,7 +43,6 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
       );
 
       if (currentPage <= 3) {
-        // Show pages 2, 3, 4 if we're near the beginning
         for (let i = 1; i <= Math.min(3, totalPages - 2); i++) {
           pages.push(
             <Button
@@ -61,7 +58,6 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
           );
         }
         
-        // Add dots if there's a gap
         if (totalPages > 5) {
           pages.push(
             <span key="dots-end" className="px-2 text-default-500">
@@ -70,7 +66,6 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
           );
         }
       } else if (currentPage >= totalPages - 4) {
-        // Add dots at the beginning
         pages.push(
           <span key="dots-start" className="px-2 text-default-500">
             ...

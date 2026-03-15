@@ -42,7 +42,6 @@ import SearchInput from "@/app/[locale]/(protected)/components/SearchInput/Searc
 import { useTranslations } from "next-intl";
 
 const TransactionsTable = () => {
-  // getting all users that their role is pharmacy
   const { loading, users, getUsersByRoleId, error } = useGetUsersByRoleId()
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -53,7 +52,6 @@ const TransactionsTable = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  // for searching users
   const [filteredUsers, setFilteredUsers] = React.useState<any[]>([]);
 
   const t = useTranslations("pharmacyList")

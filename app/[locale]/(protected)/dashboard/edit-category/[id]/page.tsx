@@ -50,13 +50,11 @@ const EditCategory = () => {
   };
 
   const updateCategory = async () => {
-    // التحقق من الحقول المطلوبة
     if (!name.trim() || !arabicName.trim() || !pref.trim() || !description.trim()) {
       toast.error(t("validationError"), { description: t("fill_all_fields") });
       return;
     }
 
-    // تجهيز FormData للإرسال (كما هو مطلوب في Swagger ليدعم binary)
     const formData = new FormData();
     formData.append("Name", name);
     formData.append("ArabicName", arabicName);
@@ -67,7 +65,6 @@ const EditCategory = () => {
       formData.append("ImageFile", imageFile);
     }
 
-    // تمرير formData للـ Hook (استخدام any لتجنب تعارض الـ types)
     const { success, error } = await (updatingCategoryById as any)(id, formData);
 
     if (success) {
@@ -99,7 +96,6 @@ const EditCategory = () => {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Arabic Name */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="category-arabic-name">
                 {t("category_arabic_name")}
@@ -113,7 +109,6 @@ const EditCategory = () => {
               />
             </div>
 
-            {/* English Name */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="category-name">
                 {t("category_name")}
@@ -127,7 +122,6 @@ const EditCategory = () => {
               />
             </div>
 
-            {/* Preference */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="category-pref">
                 {t("pref")}
@@ -141,7 +135,6 @@ const EditCategory = () => {
               />
             </div>
 
-            {/* Description */}
             <div className="flex items-start flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium mt-3" htmlFor="category-description">
                 {t("description")}
@@ -155,7 +148,6 @@ const EditCategory = () => {
               />
             </div>
 
-            {/* Image Input - تم التعديل ليكون متناسقاً تماماً */}
             <div className="flex items-center flex-wrap gap-2">
               <Label className="w-[180px] flex-none text-sm font-medium" htmlFor="imageFile">
                 {t("category_image")}

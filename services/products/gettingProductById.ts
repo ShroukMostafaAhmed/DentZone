@@ -3,12 +3,10 @@ import {ProductType} from "@/types/product";
 import AxiosInstance from "@/lib/AxiosInstance";
 
 function useGettingProductById() {
-    // states for the api calling
     const [loading, setLoading] = useState<boolean>(false);
     const [product, setProduct] = useState<ProductType | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // function to get product by id
     const getProductById = async (id: string | string[] | undefined) => {
         setLoading(true);
         setError(null);

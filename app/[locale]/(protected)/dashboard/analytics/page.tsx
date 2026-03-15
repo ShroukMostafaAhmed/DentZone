@@ -160,7 +160,7 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {/* Rest of the dashboard */}
+       
         <div className="grid grid-cols-12 gap-5">
           <div className="lg:col-span-8 col-span-12">
             <Card>
@@ -175,7 +175,6 @@ const DashboardPage = () => {
                         chartColors={["#3B82F6", "#10B981"]}
                         height={400}
                         chartType="bar"
-                        // Optional: override default categories
                         xCategories={months}
                     />
                 )}

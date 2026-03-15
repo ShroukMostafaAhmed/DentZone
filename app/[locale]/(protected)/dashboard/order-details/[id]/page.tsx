@@ -41,14 +41,11 @@ const OrderDetails = () => {
     const [order, setOrder] = useState<Orders | null>(null);
     const [selectedStatus, setSelectedStatus] = useState<OrderStatus | null>(null);
 
-    // getting order details
     const { order: orderData, getOrderById, error, loading: orderLoading } = useGettingOrderById();
 
-    // getting Order Invoice By id
     const { loading: invoiceLoading, error: invoiceError, invoice, getInvoiceByOrderId } =
         useGettingInvoiceByOrderId();
 
-    // updating order status
     const { loading: updateLoading, updateOrderStatus } = useUpdateOrderStatus();
 
     useEffect(() => {
@@ -62,19 +59,17 @@ const OrderDetails = () => {
         if (orderData) {
             setOrder(orderData);
 
-            // ✔ Correct: initialize selected status from order.status
             if (orderData.status !== undefined) {
                 setSelectedStatus(orderData.status as OrderStatus);
             }
         }
     }, [orderData]);
 
-    // Refresh order data when returning to the page
     useEffect(() => {
         if (id) {
             const refreshInterval = setInterval(() => {
                 getOrderById(id as string);
-            }, 30000); // Refresh every 30 seconds
+            }, 30000); 
 
             return () => clearInterval(refreshInterval);
         }
@@ -98,13 +93,11 @@ const OrderDetails = () => {
         );
     }
 
-    // ✔ Correct: status from order.status
     const currentStatus = currentOrder.status as OrderStatus;
     const hasStatusChanged = selectedStatus !== null && selectedStatus !== currentStatus;
 
     return (
         <>
-            {/* Order Status Update Card - Only for Inventory users */}
             {userType === "Inventory" && (
                 <Card>
                     <CardHeader>
@@ -183,7 +176,6 @@ const OrderDetails = () => {
                 </Card>
             )}
 
-            {/* Order Details Card */}
             <Card>
                 <CardHeader className="border-0">
                     <div className="flex justify-between flex-wrap gap-4 items-center">

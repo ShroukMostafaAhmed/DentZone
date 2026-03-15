@@ -22,13 +22,11 @@ import useCreateCoupon from "@/services/coupons/createCoupon";
 
 const AddCoupon = () => {
   const router = useRouter();
-  // creating new Coupon
   const {createCoupon, loading, error} = useCreateCoupon()
 
 
-  // States for coupon form
   const [code, setCode] = useState("");
-  const [type, setType] = useState<"percentage" | "fixed_amount">("percentage"); // Default to percentage
+  const [type, setType] = useState<"percentage" | "fixed_amount">("percentage"); 
   const [numberOfUsers, setNumberOfUsers] = useState("");
   const [value, setValue] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -41,7 +39,6 @@ const AddCoupon = () => {
   const [isActive, setIsActive] = useState(true);
 
   const onSubmit = async () => {
-    // Simple validation
     if (!code.trim() || !type || !value || !startDate || !endDate) {
       toast.error("Validation Error", { description: "Please fill all required fields." });
       return;
@@ -50,7 +47,6 @@ const AddCoupon = () => {
       toast.error("Validation Error", { description: "Value must be greater than 0." });
       return;
     }
-    // need to make sure that start date is less than end date
     if (new Date(startDate) >= new Date(endDate)) {
       toast.error("Validation Error", { description: "Start date must be less than end date." });
       return;

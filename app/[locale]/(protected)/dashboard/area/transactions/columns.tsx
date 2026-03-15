@@ -4,12 +4,11 @@ import { Link, usePathname } from "@/i18n/routing";
 import { SquarePen } from "lucide-react";
 import useToggleStatusSubArea from "@/services/subArea/toggleStatusSubArea";
 import useToggleAreaStatus from "@/services/area/toggleAreaStatus";
-import { toast } from "sonner"; // or your preferred toast library
-// import { useToast } from "@/components/ui/use-toast"; // if using shadcn/ui toast
+import { toast } from "sonner"; 
 
 interface GetColumnsProps {
   areaType: "main" | "secondary";
-  onRefresh?: () => void; // Function to refresh the table data
+  onRefresh?: () => void; 
 }
 
 export const getColumns = ({ areaType, onRefresh }: GetColumnsProps): ColumnDef<MainArea>[] => [
@@ -73,18 +72,15 @@ export const getColumns = ({ areaType, onRefresh }: GetColumnsProps): ColumnDef<
 
           if (result.success && onRefresh) {
             onRefresh();
-            // Success toast
             toast.success(
                 `${areaType === "main" ? "Area" : "Sub-area"} status ${isActive ? "deactivated" : "activated"} successfully!`
             );
           } else {
-            // Error toast
             toast.error(
                 result.error || `Failed to ${isActive ? "deactivate" : "activate"} ${areaType === "main" ? "area" : "sub-area"}`
             );
           }
         } catch (error) {
-          // Catch any unexpected errors
           toast.error("An unexpected error occurred. Please try again.");
           console.error("Toggle status error:", error);
         }

@@ -16,19 +16,21 @@ import { Button } from "@/components/ui/button";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation"; // CHANGED THIS LINE
+import { useRouter } from "next/navigation"; 
+
 import GettingReturnById from "@/services/returns/gettingReturnById";
 import useUpdateReturnStatus from "@/services/returns/updateReturnStatus";
 import Cookies from "js-cookie";
 
-const ReturnDetails = () => { // REMOVED THE PROPS
+const ReturnDetails = () => { 
+  
   const [returnData, setReturnData] = useState<any>(undefined);
   const [selectedStatus, setSelectedStatus] = useState<string>("requested");
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Get user type from cookies (safe for server-side)
+  
   const [userType, setUserType] = useState<string | undefined>(undefined);
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -36,24 +38,24 @@ const ReturnDetails = () => { // REMOVED THE PROPS
     }
   }, []);
 
-  // Use the custom hook for updating return status
+  
   const { loading: updating, updateReturnStatus } = useUpdateReturnStatus();
 
-  // Get ID from both params and search params safely
+  
   const idFromParams = params?.id;
   const idFromQuery = searchParams?.get("id");
   const id = Array.isArray(idFromParams) ? idFromParams[0] : idFromParams || idFromQuery || "";
 
   const { returnData: fetchedData, loading: fetching, error, getReturnById } = GettingReturnById();
 
-  // Fetch data
+  
   useEffect(() => {
     if (id) {
       getReturnById(id);
     }
   }, [id]);
 
-  // Convert numeric status to string for Select component
+  
   useEffect(() => {
     if (fetchedData) {
       const statusMap: Record<number, string> = { 0: "requested", 4: "completed" };
@@ -73,7 +75,7 @@ const ReturnDetails = () => { // REMOVED THE PROPS
     }
   }, [error]);
 
-  // Update Return Status
+  
   const handleUpdateReturnStatus = async () => {
     if (!id) {
       toast.error("Error", { description: "Return ID is missing" });
@@ -92,7 +94,7 @@ const ReturnDetails = () => { // REMOVED THE PROPS
 
         setReturnData((prev: any) => ({ ...prev, status: selectedStatus }));
 
-        // REMOVED: if (onStatusUpdate) onStatusUpdate();
+        
 
         getReturnById(id);
 

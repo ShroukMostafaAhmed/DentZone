@@ -89,7 +89,7 @@ export const baseColumns = ({refresh} : {refresh: () => void}) : ColumnDef<any>[
     accessorKey: "deliverDate",
     header: "Deliver Date",
     cell: ({ row }) => {
-    // Check if deliverDate is null or undefined
+      
         if (!row.original.deliverDate) {
             return <span className="text-gray-500">No Date Scheduled Yet</span>;
         }

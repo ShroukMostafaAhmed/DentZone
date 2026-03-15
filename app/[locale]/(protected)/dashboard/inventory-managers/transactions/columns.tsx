@@ -7,7 +7,6 @@ import useDeleteUser from "@/services/users/DeleteUser";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
-// --- مكون عرض العناوين الذكي (يدعم الاتجاهين) ---
 const AddressCell = ({ addresses, t }: { addresses: any; t: any }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
@@ -27,7 +26,6 @@ const AddressCell = ({ addresses, t }: { addresses: any; t: any }) => {
       {visibleAddresses.map((addr, index) => (
         <div 
           key={index} 
-          // dir="auto" هي اللي بتخلي العربي يمين والإنجليزي شمال تلقائياً
           dir="auto"
           className="text-[13px] text-default-600 leading-relaxed border-b border-dashed border-default-200 last:border-0 pb-1.5 mb-1 last:mb-0 last:pb-0 font-sans tracking-wide text-start"
         >
@@ -42,7 +40,6 @@ const AddressCell = ({ addresses, t }: { addresses: any; t: any }) => {
             e.stopPropagation();
             setIsExpanded(!isExpanded);
           }}
-          // استخدام text-start بيضمن إن الزرار يظهر في بداية السطر حسب اتجاه اللغة
           className="text-[11px] font-bold text-blue-500 hover:text-blue-700 w-fit mt-1 underline-offset-4 hover:underline transition-all text-start"
         >
           {isExpanded 

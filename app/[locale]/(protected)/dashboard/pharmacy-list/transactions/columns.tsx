@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import useDeleteUser from "@/services/users/DeleteUser";
 
-// --- مكون عرض العناوين الذكي (يدعم الاتجاهين عربي/إنجليزي) ---
 const AddressCell = ({ addresses, t }: { addresses: any; t: any }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
@@ -28,7 +27,6 @@ const AddressCell = ({ addresses, t }: { addresses: any; t: any }) => {
       {visibleAddresses.map((addr, index) => (
         <div 
           key={index} 
-          // dir="auto" تجعل المتصفح يحدد الاتجاه بناءً على أول حرف في النص
           dir="auto"
           className="text-[13px] text-default-600 leading-relaxed border-b border-dashed border-default-200 last:border-0 pb-1.5 mb-0.5 last:mb-0 last:pb-0 text-start"
         >

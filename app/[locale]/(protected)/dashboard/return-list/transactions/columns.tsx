@@ -10,7 +10,7 @@ export const basecolumns = ({ t }: { t: (key: string) => string }): ColumnDef<an
     accessorKey: "pharmacyName",
     header: t("pharmacyName"),
     cell: ({ row }) => {
-      // From your API response, pharmacy name is inside pharmacyUser object
+      
       const pharmacyUser = row.original.pharmacyUser;
       const name = pharmacyUser?.bussinesName || row.original.pharmacyName;
       return (
@@ -73,8 +73,7 @@ export const basecolumns = ({ t }: { t: (key: string) => string }): ColumnDef<an
 
       const statusValue = row.original.status ?? 0;
 
-      // Map numeric status to text as per your requirement:
-      // 0 = requested, 4 = completed
+      
       let statusText = "requested";
       let statusStyles = "bg-yellow-100 text-yellow-700";
 
@@ -111,7 +110,7 @@ export const basecolumns = ({ t }: { t: (key: string) => string }): ColumnDef<an
         const returnId = row.original.id;
         const userRole = Cookies.get("userRole");
 
-        // Debug logs
+        
         console.log("Return ID:", returnId);
         console.log("User Role:", userRole);
         console.log("Status value:", row.original.status);

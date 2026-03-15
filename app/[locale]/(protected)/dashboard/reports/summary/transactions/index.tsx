@@ -40,19 +40,14 @@ import useSummaryReports from "@/services/Reports/summary/summaryReports";
 
 export default function TransactionsTable() {
     const router = useRouter();
-    // using custom hook to fetch Summary reports
     const {loading: loadingSummaryReports, summaryReports, fetchSummaryReports} = useSummaryReports();
 
-    // getting users by role id
     const {loading: loadingUsers, error: errorUsers, users, getUsersByRoleId} = useGetUsersByRoleId()
 
-    // getting regions
     const {loading: loadingMainAreas, error: errorMainAreas, mainAreas, getAllMainAreas} = useGettingAllMainAreas()
 
-    // getting all pharmacy users
     const {loading: loadingPharmacies, error: errorPharmacies, pharmacies, gettingAllPharmacies} = useGettingAllPharmacies()
 
-    // State for filter values
     const [dateRange, setDateRange] = useState<DateRange | undefined>({
         from: subDays(new Date(), 30),
         to: new Date(),
@@ -63,7 +58,6 @@ export default function TransactionsTable() {
     const [status, setStatus] = useState<OrderStatus | undefined>(undefined);
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>(undefined);
 
-    // Fetch dropdown data on mount
     useEffect(() => {
         const fetchDataInitial = async () => {
             try {
@@ -76,13 +70,12 @@ export default function TransactionsTable() {
 
         fetchDataInitial();
         gettingAllPharmacies();
-        fetchData(); // Fetch summary data on initial load
+        fetchData(); 
     }, []);
 
     const fetchData = () => {
         const params = new URLSearchParams();
 
-        // Add filters only if they have values
         if (dateRange?.from) {
             params.set('StartDate', dateRange.from.toISOString());
         }
@@ -107,7 +100,6 @@ export default function TransactionsTable() {
 
         console.log(params.toString());
 
-        // Call the API with the constructed query string
         fetchSummaryReports(params.toString());
     };
 
@@ -126,22 +118,19 @@ export default function TransactionsTable() {
         setStatus(undefined);
         setPaymentMethod(undefined);
 
-        // Fetch data with reset filters
         setTimeout(() => {
             fetchData();
         }, 100);
     };
 
-    // Helper function to format currency
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD', // Change to your preferred currency
+            currency: 'USD', 
             minimumFractionDigits: 2,
         }).format(amount);
     };
 
-    // Helper function to format numbers
     const formatNumber = (num: number) => {
         return new Intl.NumberFormat('en-US').format(num);
     };
@@ -156,7 +145,7 @@ export default function TransactionsTable() {
 
     return (
         <div className="w-full space-y-6">
-            {/* Filters Card */}
+          
             <Card>
                 <CardHeader>
                     <CardTitle>Summary Reports Filters</CardTitle>

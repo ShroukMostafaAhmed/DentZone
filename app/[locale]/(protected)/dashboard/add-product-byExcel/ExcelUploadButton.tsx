@@ -14,7 +14,6 @@ const ExcelUploadButton: React.FC<ExcelUploadButtonProps> = ({ onSuccess }) => {
   const handleFileUpload = async (file: File) => {
     if (!file) return;
 
-    // Validate file type
     const validTypes = [
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "application/vnd.ms-excel",
@@ -27,7 +26,6 @@ const ExcelUploadButton: React.FC<ExcelUploadButtonProps> = ({ onSuccess }) => {
       return;
     }
 
-    // Show uploading toast
     const uploadToastId = toast.loading("Uploading Excel file...", {
       description: "Processing your product data...",
     });
@@ -38,7 +36,6 @@ const ExcelUploadButton: React.FC<ExcelUploadButtonProps> = ({ onSuccess }) => {
 
       if (result.success) {
         if (result.hasFailedEntries) {
-          // Some entries failed validation
           toast.warning("Upload completed with issues", {
             description: (
               <div className="flex flex-col gap-2">
@@ -58,7 +55,6 @@ const ExcelUploadButton: React.FC<ExcelUploadButtonProps> = ({ onSuccess }) => {
             duration: 8000,
           });
         } else {
-          // All entries processed successfully
           toast.success("Excel upload successful!", {
             description: "All products were processed successfully.",
             icon: <CheckCircle className="w-4 h-4" />,
@@ -85,7 +81,6 @@ const ExcelUploadButton: React.FC<ExcelUploadButtonProps> = ({ onSuccess }) => {
     if (file) {
       handleFileUpload(file);
     }
-    // Reset input value to allow re-uploading the same file
     e.target.value = "";
   };
 

@@ -52,18 +52,18 @@ const TransactionsTable = () => {
   const userType = Cookies.get("userRole");
   const isInventoryUser = userType === "Inventory";
 
-  // Hooks for different data sources
+  
   const {loading: loadingReturns, error: error, returns, getAllReturns} = useGettingAllReturns();
   const {loading: loadingVendorReturns, error: vendorError, returns: vendorReturns, gettingVendorReturns} = useVendorReturns();
 
-  // State for filtered data
+  
   const [filteredData, setFilteredData] = React.useState<any[]>([]);
 
-  // Create unified data source and loading state
+  
   const allReturnsData = isInventoryUser ? vendorReturns : returns;
   const isLoadingData = isInventoryUser ? loadingVendorReturns : loadingReturns;
 
-  // filtering return data for table
+  
   const filteringReturns = (filter: string) => {
     if (!allReturnsData) return;
 
@@ -98,7 +98,7 @@ const TransactionsTable = () => {
     },
   });
 
-  // Load data based on user type
+  
   useEffect(() => {
     if (isInventoryUser) {
       gettingVendorReturns();
@@ -107,7 +107,7 @@ const TransactionsTable = () => {
     }
   }, [isInventoryUser]);
 
-  // Update filtered data when returns data changes
+  
   useEffect(() => {
     if (allReturnsData) {
       setFilteredData(allReturnsData);
