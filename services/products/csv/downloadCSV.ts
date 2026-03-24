@@ -28,7 +28,6 @@ function useDownloadCsv(): DownloadCsvHook {
                 throw new Error('No data received from server');
             }
 
-            // Verify content type (some servers might send different content types)
             const contentType = response.headers['content-type'];
             if (!contentType.includes('xlsx') && !contentType.includes('octet-stream')) {
                 console.warn(`Unexpected content type: ${contentType}`);
@@ -41,10 +40,9 @@ function useDownloadCsv(): DownloadCsvHook {
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = 'products.xlsx';
-                document.body.appendChild(a); // Required for Firefox
+                document.body.appendChild(a);
                 a.click();
 
-                // Cleanup
                 setTimeout(() => {
                     document.body.removeChild(a);
                     window.URL.revokeObjectURL(url);

@@ -13,12 +13,15 @@ const SearchInput: React.FC<SearchInputProps> = ({ data, setFilteredData, filter
     const [searchValue, setSearchValue] = useState("");
 
     useEffect(() => {
-        if (searchValue === "") {
-            setFilteredData(data); // reset to all data
+        if (!searchValue.trim()) {
+            setFilteredData(data); 
         } else {
-            const filtered = data.filter((item) =>
-                item[filterKey]?.toLowerCase().includes(searchValue.toLowerCase())
-            );
+            const filtered = data.filter((item) => {
+                const targetValue = item[filterKey];
+                return targetValue 
+                    ? targetValue.toString().toLowerCase().includes(searchValue.toLowerCase())
+                    : false;
+            });
             setFilteredData(filtered);
         }
     }, [searchValue, data, filterKey, setFilteredData]);
@@ -26,7 +29,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ data, setFilteredData, filter
     return (
         <Input
             type="text"
-            placeholder={`Search by ${filterKey}`}
+            placeholder={`Search...`}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             className="w-full max-w-xl"

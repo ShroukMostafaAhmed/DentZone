@@ -16,21 +16,19 @@ import { Button } from "@/components/ui/button";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 
 import GettingReturnById from "@/services/returns/gettingReturnById";
 import useUpdateReturnStatus from "@/services/returns/updateReturnStatus";
 import Cookies from "js-cookie";
 
-const ReturnDetails = () => { 
-  
+const ReturnDetails = () => {
   const [returnData, setReturnData] = useState<any>(undefined);
   const [selectedStatus, setSelectedStatus] = useState<string>("requested");
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  
   const [userType, setUserType] = useState<string | undefined>(undefined);
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -38,24 +36,20 @@ const ReturnDetails = () => {
     }
   }, []);
 
-  
   const { loading: updating, updateReturnStatus } = useUpdateReturnStatus();
 
-  
   const idFromParams = params?.id;
   const idFromQuery = searchParams?.get("id");
   const id = Array.isArray(idFromParams) ? idFromParams[0] : idFromParams || idFromQuery || "";
 
   const { returnData: fetchedData, loading: fetching, error, getReturnById } = GettingReturnById();
 
-  
   useEffect(() => {
     if (id) {
       getReturnById(id);
     }
   }, [id]);
 
-  
   useEffect(() => {
     if (fetchedData) {
       const statusMap: Record<number, string> = { 0: "requested", 4: "completed" };
@@ -75,7 +69,6 @@ const ReturnDetails = () => {
     }
   }, [error]);
 
-  
   const handleUpdateReturnStatus = async () => {
     if (!id) {
       toast.error("Error", { description: "Return ID is missing" });
@@ -91,13 +84,8 @@ const ReturnDetails = () => {
 
       if (result.success) {
         toast.success("Return Updated", { description: "Return Status Updated Successfully" });
-
         setReturnData((prev: any) => ({ ...prev, status: selectedStatus }));
-
-        
-
         getReturnById(id);
-
         setTimeout(() => router.push("/dashboard/return-list"), 1200);
       } else {
         toast.error("Failed", { description: result.error || "Update Failed" });
@@ -108,8 +96,6 @@ const ReturnDetails = () => {
   };
 
   const isLoading = fetching || updating;
-  const currentStatus = returnData?.status || "requested";
-  const hasStatusChanged = selectedStatus !== currentStatus;
 
   if (fetching) {
     return (
@@ -124,32 +110,10 @@ const ReturnDetails = () => {
     );
   }
 
-  const getReasonForProduct = (productId: string) => {
-    const returnedItem = returnData?.inventoryUser?.returnedItems?.find(
-      (item: any) => item.productId === productId
-    );
-    if (returnedItem?.reason?.reason) return returnedItem.reason.reason;
-    if (returnedItem?.otherReason) return returnedItem.otherReason;
-
-    const returnOrderItem = returnData?.returnOrderInventoryUsers?.[0]?.returnedItems?.find(
-      (item: any) => item.productId === productId
-    );
-    if (returnOrderItem?.reason?.reason) return returnOrderItem.reason.reason;
-    if (returnOrderItem?.otherReason) return returnOrderItem.otherReason;
-
-    const productPriceReturnItem = returnData?.inventoryUser?.productPrices?.[0]?.returnedItems?.find(
-      (item: any) => item.productId === productId
-    );
-    if (productPriceReturnItem?.reason?.reason) return productPriceReturnItem.reason.reason;
-    if (productPriceReturnItem?.otherReason) return productPriceReturnItem.otherReason;
-
-    return "N/A";
-  };
-
   return (
     <>
       {userType === "Inventory" && (
-        <Card>
+        <Card className="mb-6">
           <CardHeader>
             <CardTitle>Update Return Status</CardTitle>
           </CardHeader>
@@ -179,7 +143,6 @@ const ReturnDetails = () => {
                       </div>
                     </SelectValue>
                   </SelectTrigger>
-
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Status</SelectLabel>
@@ -200,13 +163,12 @@ const ReturnDetails = () => {
                 </Select>
               </div>
 
-              <div className="flex items-center justify-center flex-wrap gap-4">
+              <div className="flex items-center justify-center">
                 <Button
                   size="md"
                   variant="outline"
-                  className="w-[150px] flex-none"
-                  type="button"
-                  disabled={isLoading || !hasStatusChanged || returnData?.status === "completed"}
+                  className="w-[150px]"
+                  disabled={isLoading || selectedStatus === returnData?.status || returnData?.status === "completed"}
                   onClick={handleUpdateReturnStatus}
                 >
                   {updating ? (
@@ -227,43 +189,41 @@ const ReturnDetails = () => {
       <Card>
         <CardHeader className="border-0">
           <div className="flex justify-between flex-wrap gap-4 items-center">
-            <div>
-              <span className="block text-default-900 font-medium text-xl">Return Details</span>
-              <div className="text-default-500 mt-4 text-sm">
-                <div className="mb-4">
-                  <span className="font-medium">Pharmacy Name:</span>{" "}
-                  {returnData?.pharmacyName || returnData?.pharmacyUser?.bussinesName || "N/A"}
+            <div className="w-full">
+              <span className="block text-default-900 font-medium text-xl mb-4">Return Details</span>
+              
+              <div className="text-default-500 text-sm space-y-2">
+                <div>
+                  <span className="font-bold text-default-900">Provider Name:</span>{" "}
+                  {returnData?.inventoryUser?.fullName || "N/A"}
                 </div>
 
                 {returnData?.items?.length ? (
                   returnData.items.map((item: any, index: number) => {
-                    const productPrice = returnData.inventoryUser?.productPrices?.find(
-                      (pp: any) => pp.id === item.productPriceId
+                    const productPriceInfo = returnData.inventoryUser?.productPrices?.find(
+                      (pp: any) => pp.productId === item.productId
                     );
-                    const product = productPrice?.product;
-                    const reason = getReasonForProduct(item.productId);
 
                     return (
-                      <div key={index} className="mt-4 p-4 border border-gray-200 rounded bg-gray-50">
+                      <div key={index} className="mt-4 p-4 border border-gray-200 rounded bg-gray-50 space-y-1">
                         <div>
-                          <span className="font-medium">Product:</span> {product?.name || "N/A"}
+                          <span className="font-medium">Product ID:</span> {item.productId}
                         </div>
                         <div>
-                          <span className="font-medium">Quantity Returned:</span>{" "}
-                          {item.quantityReturned || "N/A"}
+                          <span className="font-medium">Quantity Returned:</span> {item.quantityReturned}
                         </div>
                         <div>
                           <span className="font-medium">Price per unit:</span>{" "}
-                          {productPrice?.salesPrice ? `$${productPrice.salesPrice.toFixed(2)}` : "N/A"}
+                          {item.itemPrice ? `$${item.itemPrice.toFixed(2)}` : "N/A"}
                         </div>
                         <div>
                           <span className="font-medium">Total Amount:</span>{" "}
-                          {productPrice?.salesPrice && item.quantityReturned
-                            ? `$${(productPrice.salesPrice * item.quantityReturned).toFixed(2)}`
-                            : "N/A"}
+                          {item.productPrice 
+                            ? `$${(item.productPrice * item.quantityReturned).toFixed(2)}` 
+                            : `$${returnData.totalReturnValue?.toFixed(2)}`}
                         </div>
                         <div>
-                          <span className="font-medium">Reason:</span> {reason}
+                          <span className="font-medium">Reason:</span> {item.otherReason || "N/A"}
                         </div>
                       </div>
                     );
@@ -272,18 +232,21 @@ const ReturnDetails = () => {
                   <div className="text-center py-4 text-gray-500">No items found</div>
                 )}
               </div>
-              <br />
-              <h4 className="text-default-600 text-xs uppercase mb-2">Return Id: {returnData?.id || "N/A"}</h4>
-              <h4 className="text-default-600 text-xs uppercase">Return Date: {returnData?.requestDate || "N/A"}</h4>
-              <h4 className="text-default-600 text-xs uppercase mt-2">
-                Status:{" "}
-                <span className={`px-2 py-1 rounded text-xs ${returnData?.status === "completed"
-                  ? "bg-green-100 text-green-800"
-                  : "bg-yellow-100 text-yellow-800"
+
+              <div className="mt-6 pt-4 border-t border-gray-100 space-y-1">
+                <h4 className="text-default-600 text-xs uppercase">Return ID: {returnData?.id || "N/A"}</h4>
+                <h4 className="text-default-600 text-xs uppercase">Return Date: {returnData?.requestDate ? new Date(returnData.requestDate).toLocaleString() : "N/A"}</h4>
+                <h4 className="text-default-600 text-xs uppercase flex items-center gap-2">
+                  Status:{" "}
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    returnData?.status === "completed"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-yellow-100 text-yellow-800"
                   }`}>
-                  {returnData?.status === "completed" ? "Completed" : "Requested"}
-                </span>
-              </h4>
+                    {returnData?.status === "completed" ? "COMPLETED" : "REQUESTED"}
+                  </span>
+                </h4>
+              </div>
             </div>
           </div>
         </CardHeader>

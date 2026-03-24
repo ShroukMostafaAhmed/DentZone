@@ -16,7 +16,8 @@ export const baseColumns = ({
   t: (key: string) => string;
   locale: string;
 }): ColumnDef<ProductType>[] => {
-  const userRole = Cookies.get("userRole");
+  
+  const userRole = Cookies.get("userRole"); 
   const locale = useLocale();
   const isArabic = locale === "ar";
 
@@ -28,7 +29,6 @@ export const baseColumns = ({
         const name = isArabic 
           ? row.original.productArabicName
           : row.original.productName;
-        
         return <span className="text-sm font-medium">{name || t("unknown")}</span>;
       },
     },
@@ -56,7 +56,10 @@ export const baseColumns = ({
         return <span className="text-sm">{categoryName || t("unknown")}</span>;
       },
     },
-    {
+  ];
+
+  if (userRole === "Admin") {
+    columns.push({
       id: "actions",
       header: isArabic ? "الإجراءات" : "Actions",
       cell: ({ row }) => {
@@ -98,19 +101,17 @@ export const baseColumns = ({
             >
               <SquarePen className="w-4 h-4" />
             </Link>
-            {userRole === "Admin" && (
-              <button
-                onClick={() => row.original.id && handleDelete(row.original.id)}
-                className="p-2 text-destructive bg-destructive/10 rounded-full hover:bg-destructive hover:text-white transition-all"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            )}
+            <button
+              onClick={() => row.original.id && handleDelete(row.original.id)}
+              className="p-2 text-destructive bg-destructive/10 rounded-full hover:bg-destructive hover:text-white transition-all"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
           </div>
         );
       },
-    },
-  ];
+    });
+  }
 
   return columns;
 };

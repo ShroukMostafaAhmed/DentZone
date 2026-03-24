@@ -9,14 +9,14 @@ export const baseColumns = ({ t }: {
   t: (key: string) => string;
 }): ColumnDef<Price>[] => [
   {
-    accessorKey: "productArabicName",
+    accessorKey: "productName",
     header: t("productName"),
     cell: ({ row }) => {
       return (
         <div className="font-medium text-card-foreground/80">
           <div className="flex gap-3 items-center">
             <span className="text-sm text-default-600 whitespace-nowrap">
-              {row.getValue("productArabicName")}
+              {row.getValue("productName")}
             </span>
           </div>
         </div>
@@ -64,7 +64,6 @@ export const baseColumns = ({ t }: {
     },
   },
 
-  
   // {
   //   id: "actions",
   //   accessorKey: "action",

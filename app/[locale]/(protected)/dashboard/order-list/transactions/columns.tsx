@@ -20,25 +20,11 @@ export const baseColumns = ({ refresh, t }: {
       accessorKey: "orderNumber",
       header: t("orderNumber"),
       cell: ({ row }) => <span>{row.getValue("orderNumber") || "N/A"}</span>,
-    }, {
-      accessorKey: "pharmacyName",
-      header: t("pharmacyName"),
-      cell: ({ row }) => {
-        const name = row.original.pharmacyName;
-
-        return (
-          <div className="font-medium text-card-foreground/80">
-            <span className="text-sm text-default-600 whitespace-nowrap">
-              {name ?? "N/A"}
-            </span>
-          </div>
-        );
-      },
     },
 
     {
       accessorKey: "inventoryName",
-      header: t("inventoryName"),
+      header: t("provider"),
       cell: ({ row }) => {
         const items = row.original.items || [];
 

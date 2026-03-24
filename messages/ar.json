@@ -123,8 +123,12 @@
     "todos": "مهام"
   },
   "Menu": {
+    "price-management": "الإدارة السعرية",
+    "brands": "العلامات التجارية",
     "dashboard": "لوحة التحكم",
     "analytics": "تحليلات",
+    "orders": "الطلبات",
+    "returns": "الارجاع",
     "banking": "بنكية",
     "edit-user": "الملف الشخصى",
     "Providers": "الموردون",
@@ -302,6 +306,8 @@
     "pharmacyName": "اسم الصيدلية",
     "inventoryName": "اسم المخزن",
     "date": "التاريخ",
+    "provider": " المورد",
+
     "Actions": "الإجراءات",
     "status": "الحالة",
     "totalAmount": "المبلغ الإجمالي",
@@ -350,6 +356,7 @@
   },
   "orderDetailsPage": {
     "orderDetails": "تفاصيل الطلب",
+    "providerName": "اسم المورد",
     "orderStatus": "حاله الطلب",
     "orderNumber": "رقم الطلب",
     "pharmacyName": "اسم الصيدلية",
@@ -551,6 +558,7 @@
     "returnNumber": "رقم الإرجاع",
     "pharmacyName": "اسم الصيدلية",
     "inventoryName": "اسم المخزن",
+    "providerName": "اسم المورد",
     "date": "التاريخ",
     "unknown": "غير معروف",
     "status": "الحالة",
@@ -613,7 +621,10 @@
     "arabicPreef": "الوصف بالعربية",
     "arabicCategory": "الفئة بالعربية",
     "arabicDescription": "الوصف بالعربية",
-
+    "warning": "تحذير",
+    "selectBrandPlaceholder": "اختر العلامة التجارية",
+    "searchBrand": "ابحث عن العلامة التجارية",
+    "delete_product_success": "تم حذف المنتج بنجاح.",
     "unknown": "غير معروف",
     "category": "الفئة",
     "brand": "العلامة التجارية",
@@ -777,5 +788,36 @@
     "category_description_required": "وصف الفئة مطلوب.",
     "category_pref_required": "الأفضلية مطلوبة.",
     "category_Information": "معلومات الفئة"
+  },
+  "brands": {
+    "brand name": "اسم العلامة التجارية",
+    "brand arabic name": "اسم العلامة التجارية بالعربية",
+    "description": "الوصف",
+    "actions": "الإجراءات",
+    "unknown": "غير معروف",
+    "delete_brand": "حذف العلامة التجارية",
+    "delete_brand_confirm": "هل أنت متأكد أنك تريد حذف هذه العلامة التجارية؟",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "brand_deleted": "تم حذف العلامة التجارية",
+    "brand_deleted_success": "تم حذف العلامة التجارية بنجاح.",
+    "error": "خطأ",
+    "add_brand": "إضافة علامة تجارية",
+    "brand_image": "صورة العلامة التجارية",
+
+    "brand_added": "تمت إضافة العلامة التجارية",
+    "brand_added_success": "تمت إضافة العلامة التجارية بنجاح.",
+    "brand_updated": "تم تحديث العلامة التجارية",
+    "update_brand": "تحديث العلامة التجارية",
+    "brand_updated_success": "تم تحديث العلامة التجارية بنجاح.",
+    "failed_to_add_brand": "فشل في إضافة العلامة التجارية",
+    "failed_to_update_brand": "فشل في تحديث العلامة التجارية",
+    "failed_to_delete_brand": "فشل في حذف العلامة التجارية",
+    "validationError": "خطأ في التحقق.",
+    "brand_name_required": "اسم العلامة التجارية مطلوب.",
+    "brand_arabic_name_required": "اسم العلامة التجارية بالعربية مطلوب.",
+    "brand_description_required": "وصف العلامة التجارية مطلوب.",
+    "brand_information": "معلومات العلامة التجارية"
+
   }
 }

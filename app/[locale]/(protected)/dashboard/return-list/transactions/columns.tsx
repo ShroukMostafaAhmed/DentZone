@@ -6,32 +6,17 @@ import { useRouter } from "@/i18n/routing";
 import Cookies from "js-cookie";
 
 export const basecolumns = ({ t }: { t: (key: string) => string }): ColumnDef<any>[] => [
-  {
-    accessorKey: "pharmacyName",
-    header: t("pharmacyName"),
-    cell: ({ row }) => {
-      
-      const pharmacyUser = row.original.pharmacyUser;
-      const name = pharmacyUser?.bussinesName || row.original.pharmacyName;
-      return (
-        <div className="font-medium text-card-foreground/80">
-          <span className="text-sm text-default-600 whitespace-nowrap">
-            {name ?? t("unknown")}
-          </span>
-        </div>
-      );
-    },
-  },
+ 
   {
     accessorKey: "inventoryName",
-    header: t("inventoryName"),
+    header: t("providerName"),
     cell: ({ row }) => {
-      const mainInventory = row.original.inventoryUser?.bussinesName;
+      const mainInventory = row.original.inventoryUser?.fullName;
       const items = row.original.items || [];
       const itemNames = Array.from(
         new Set(
           items
-            .map((item: any) => item.inventoryUser?.bussinesName)
+            .map((item: any) => item.inventoryUser?.fullName)
             .filter(Boolean)
         )
       );

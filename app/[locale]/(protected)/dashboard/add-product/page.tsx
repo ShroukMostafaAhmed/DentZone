@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import GetCategories from "@/services/categories/getCategories";
+import useGetBrands from "@/services/brands/getAllBrands"; 
 import { Loader2, X } from "lucide-react";
 import useCreateProduct from "@/services/products/createProduct";
 import { toast } from "sonner";
@@ -32,27 +33,42 @@ const AddProduct = () => {
   const [description, setDescription] = useState<string>("");
   const [arabicDescription, setArabicDescription] = useState<string>("");
   const [categoryId, setCategoryId] = useState<string>("");
+  const [brandId, setBrandId] = useState<string>("");
   
   const [photos, setPhotos] = useState<File[]>([]);
   
   const [categorySearch, setCategorySearch] = useState<string>("");
   const [filteredCategories, setFilteredCategories] = useState<any[]>([]);
 
-  const { loading: gettingAllCatLoading, data, gettingAllCategories } = GetCategories();
+  const [brandSearch, setBrandSearch] = useState<string>("");
+  const [filteredBrands, setFilteredBrands] = useState<any[]>([]);
+
+  const { loading: gettingAllCatLoading, data: categoriesData, gettingAllCategories } = GetCategories();
+  const { loading: gettingBrandsLoading, brands, getAllBrands } = useGetBrands();
   const { createProduct, loading: creatingProductLoading } = useCreateProduct();
 
   useEffect(() => {
     gettingAllCategories();
+    getAllBrands();
   }, []);
 
   useEffect(() => {
-    if (data) {
-      const filtered = data.filter((category: any) =>
+    if (categoriesData) {
+      const filtered = categoriesData.filter((category: any) =>
         category.name.toLowerCase().includes(categorySearch.toLowerCase())
       );
       setFilteredCategories(filtered);
     }
-  }, [categorySearch, data]);
+  }, [categorySearch, categoriesData]);
+
+  useEffect(() => {
+    if (brands) {
+      const filtered = brands.filter((brand: any) =>
+        brand.name.toLowerCase().includes(brandSearch.toLowerCase())
+      );
+      setFilteredBrands(filtered);
+    }
+  }, [brandSearch, brands]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -60,13 +76,14 @@ const AddProduct = () => {
       setPhotos((prev) => [...prev, ...newFiles]);
     }
   };
+
   const removePhoto = (index: number) => {
     setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
 
   const onSubmit = async () => {
-    if (!name.trim() || !categoryId) {
-      toast.error(t("fillRequiredFields") || "الرجاء ملء الحقول المطلوبة");
+    if (!name.trim() || !categoryId || !brandId) {
+      toast.error(t("fillRequiredFields"));
       return;
     }
 
@@ -78,6 +95,7 @@ const AddProduct = () => {
     formData.append("Description", description);
     formData.append("ArabicDescription", arabicDescription);
     formData.append("CategoryId", categoryId);
+    formData.append("BrandId", brandId);
     
     photos.forEach((file) => {
       formData.append("Photos", file);
@@ -97,7 +115,7 @@ const AddProduct = () => {
     }
   };
 
-  if (gettingAllCatLoading) {
+  if (gettingAllCatLoading || gettingBrandsLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
         <Loader2 className="animate-spin" size={40} />
@@ -155,7 +173,31 @@ const AddProduct = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
+              <div className="flex items-center gap-2">
+                <Label className="w-[120px]">{t("brand")}</Label>
+                <Select onValueChange={(value) => setBrandId(value)}>
+                  <SelectTrigger className="flex-1">
+                    <SelectValue placeholder={t("selectBrandPlaceholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <div className="px-2 py-1">
+                      <Input 
+                        placeholder={t("searchBrand")} 
+                        onChange={(e) => setBrandSearch(e.target.value)} 
+                      />
+                    </div>
+                    <SelectGroup>
+                      {filteredBrands.map((brand: any) => (
+                        <SelectItem key={brand.id} value={brand.id.toString()}>{brand.name}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <Label className="w-[120px]">{t("productPhoto")}</Label>

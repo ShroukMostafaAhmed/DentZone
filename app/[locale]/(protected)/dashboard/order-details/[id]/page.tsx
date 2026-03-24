@@ -184,11 +184,9 @@ const OrderDetails = () => {
                                 {t("orderDetails")}
                             </span>
 
-                            <div className="text-default-500 font-normal mt-4 text-sm">
-                                {t("pharmacyName")}: {currentOrder.pharmacyName || "N/A"}
-
+                           
                                 <div className="flex space-x-2 mt-2">
-                                    <p>{t("inventoryManger")}:</p>
+                                    <p>{t("providerName")}:</p>
 
                                     <span>
                                         {currentOrder.items?.length > 0
@@ -201,7 +199,7 @@ const OrderDetails = () => {
                                             ).join(", ")
                                             : "N/A"}
                                     </span>
-                                </div>
+                             
                             </div>
                         </div>
 

@@ -115,7 +115,6 @@ const TablePagination = ({ table }: DataTablePaginationProps) => {
         );
       }
 
-      // Always show last page (if it's not already shown)
       if (totalPages > 1) {
         pages.push(
           <Button

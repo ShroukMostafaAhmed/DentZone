@@ -59,7 +59,6 @@ export const calendarEvents = [
     start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
     end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
     allDay: true,
-    // className: "danger",
     extendedProps: {
       calendar: "holiday",
     },
@@ -70,7 +69,6 @@ export const calendarEvents = [
     start: nextMonth,
     end: nextMonth,
     allDay: true,
-    //className: "primary",
     extendedProps: {
       calendar: "business",
     },

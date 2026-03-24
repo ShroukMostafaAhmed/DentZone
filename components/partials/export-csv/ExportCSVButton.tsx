@@ -9,7 +9,6 @@ import { useTranslations } from "next-intl";
 export function ExportCSVButton() {
     const t = useTranslations("exportFile");
 
-    // Custom hook to handle CSV download logic
     const { loading, error, downloadCSV } = useDownloadCsv();
 
     const handleClick = async () => {

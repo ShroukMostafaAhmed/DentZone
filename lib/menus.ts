@@ -104,14 +104,14 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
             },
             {
               href: "/dashboard/order-list",
-              label: t("orderList"),
+              label: t("orders"),
               active: pathname === "/dashboard/order-list",
               children: [],
               icon: "",
             },
             {
               href: "/dashboard/return-list",
-              label: t("returnList"),
+              label: t("returns"),
               active: pathname === "/dashboard/return-list",
               children: [],
               icon: "",
@@ -124,9 +124,23 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
               icon: "",
             },
             {
+              href: "/dashboard/brand",
+              label: t("brands"),
+              active: pathname === "/dashboard/brand",
+              children: [],
+              icon: "",
+            },
+            {
               href: "/dashboard/product-list",
-              label: t("productList"),
+              label: t("products"),
               active: pathname === "/dashboard/product-list",
+              children: [],
+              icon: "",
+            },
+             {
+              href: "/dashboard/inventory-management",
+              label: t("price-management"),
+              active: pathname === "/dashboard/inventory-management",
               children: [],
               icon: "",
             },
@@ -137,6 +151,7 @@ export function getMenuList(pathname: string, t: any, role: string, locale: stri
               children: [],
               icon: "",
             },
+            
             {
               href: "/dashboard/inventory-managers",
               label: t("Providers"),
